@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdn.sheetjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'">
+    <title>STAMPS Bulk Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <!-- XLSX library for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <div class="app-simple">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="header-title">
+                    <h1>STAMPS Bulk Generator</h1>
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/api/template/download" class="btn btn-outline" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download Template
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Step Indicator -->
+            <div class="steps-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>Select Files</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>Preview Data</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>Validate</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>Generate</span>
+                </div>
+            </div>
+
+            <!-- Step Contents -->
+            <div class="step-contents">
+                <!-- Step 1: Select Files -->
+                <div class="step-content active" data-step="1">
+                    <div class="file-upload-section">
+                        <!-- Excel Upload Card -->
+                        <div class="file-card large" id="excel-card">
+                            <div class="file-card-content">
+                                <div class="file-icon-large">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                    </svg>
+                                </div>
+                                <h3>Upload Excel/CSV File</h3>
+                                <p class="file-path" id="excel-path">No file selected</p>
+                                <button class="btn btn-primary" id="select-excel-btn">Select File</button>
+                                <p class="file-hint">Use "Download Template" for the correct format</p>
+                            </div>
+                        </div>
+
+                        <!-- Attachments Section (shown after Excel upload) -->
+                        <div class="attachments-section" id="attachments-section" style="display: none;">
+                            <div class="section-header">
+                                <h3>Attachments</h3>
+                                <p>Select the PDF/image files referenced in your Excel data</p>
+                            </div>
+                            <div class="required-files-container">
+                                <div class="required-files-header">
+                                    <span class="required-count" id="required-count">0 attachments required</span>
+                                    <button class="btn btn-outline btn-sm" id="select-attachments-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                                        </svg>
+                                        Select PDF Files
+                                    </button>
+                                </div>
+                                <div class="required-files-list" id="required-files-list">
+                                    <!-- Required files will be populated dynamically -->
+                                </div>
+                                <div class="attachment-status">
+                                    <span class="matched-count" id="matched-count">0 matched</span>
+                                    <span class="missing-count" id="missing-count">0 missing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-primary" id="proceed-step-2" disabled>
+                            Continue to Preview
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Preview Data -->
+                <div class="step-content" data-step="2">
+                    <div class="data-summary">
+                        <div class="summary-card">
+                            <span class="summary-value" id="total-records">0</span>
+                            <span class="summary-label">Records</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-value" id="total-attachments">0</span>
+                            <span class="summary-label">Attachments</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-value" id="estimated-size">0 KB</span>
+                            <span class="summary-label">Est. Size</span>
+                        </div>
+                    </div>
+
+                    <div class="preview-table-container">
+                        <table class="preview-table">
+                            <thead>
+                                <tr id="preview-header"></tr>
+                            </thead>
+                            <tbody id="preview-body"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-outline" id="back-step-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Back
+                        </button>
+                        <button class="btn btn-primary" id="proceed-step-3">
+                            Continue to Validate
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Validate -->
+                <div class="step-content" data-step="3">
+                    <div class="validation-area">
+                        <div class="validation-status" id="validation-status">
+                            <div class="validation-icon pending">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                            </div>
+                            <h3>Ready to Validate</h3>
+                            <p>Click the button below to validate your data</p>
+                            <button class="btn btn-primary" id="run-validation">Run Validation</button>
+                        </div>
+
+                        <div class="validation-results" id="validation-results" style="display: none;">
+                            <div class="validation-summary">
+                                <span class="valid-count" id="valid-count">0 valid</span>
+                                <span class="error-count" id="error-count">0 errors</span>
+                                <span class="warning-count" id="warning-count">0 warnings</span>
+                            </div>
+                            <div class="errors-list" id="errors-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-outline" id="back-step-2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Back
+                        </button>
+                        <button class="btn btn-primary" id="proceed-step-4" disabled>
+                            Continue to Generate
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Generate -->
+                <div class="step-content" data-step="4">
+                    <div class="generation-area">
+                        <div class="generation-status" id="generation-status">
+                            <div class="generation-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                </svg>
+                            </div>
+                            <h3>Ready to Generate</h3>
+                            <p>Click the button below to generate STAMPS XML files</p>
+                            <button class="btn btn-primary btn-lg" id="start-generation">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                Generate XML
+                            </button>
+                        </div>
+
+                        <div class="generation-progress" id="generation-progress" style="display: none;">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <p class="progress-text" id="progress-text">Processing...</p>
+                        </div>
+
+                        <div class="generation-complete" id="generation-complete" style="display: none;">
+                            <div class="success-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                            </div>
+                            <h3>Generation Complete!</h3>
+                            <div class="generated-files" id="generated-files"></div>
+                            <button class="btn btn-primary" id="start-new">
+                                Start New Generation
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button class="btn btn-outline" id="back-step-3">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden File Inputs -->
+    <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv" style="display: none;">
+    <input type="file" id="pdf-file-input" accept=".pdf,.jpg,.jpeg,.png" multiple style="display: none;">
+
+    <script src="app.js" type="module"></script>
+</body>
+
+</html>
