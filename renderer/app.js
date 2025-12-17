@@ -553,8 +553,13 @@ async function startGeneration() {
 
         state.generatedFiles = batches;
 
-        // Download files via browser
-        for (const batch of batches) {
+        // Download files via browser (with delay between each to avoid popup blocker)
+        for (let i = 0; i < batches.length; i++) {
+            const batch = batches[i];
+            if (i > 0) {
+                // Wait 500ms between downloads to avoid popup blocker
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
             downloadFile(batch.filename, batch.content, 'application/xml');
         }
 
@@ -562,18 +567,26 @@ async function startGeneration() {
         elements.generationProgress.style.display = 'none';
         elements.generationComplete.style.display = 'block';
 
-        elements.generatedFiles.innerHTML = batches.map(batch => `
+        // Create download links for manual download (in case auto-download was blocked)
+        elements.generatedFiles.innerHTML = batches.map((batch, idx) => {
+            const blob = new Blob([batch.content], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            // Store the URL for cleanup later
+            if (!state.downloadUrls) state.downloadUrls = [];
+            state.downloadUrls.push(url);
+
+            return `
             <div class="generated-file">
                 <div class="generated-file-name">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                         <polyline points="22 4 12 14.01 9 11.01"/>
                     </svg>
-                    ${batch.filename}
+                    <a href="${url}" download="${batch.filename}" style="color: inherit; text-decoration: underline;">${batch.filename}</a>
                 </div>
                 <div class="generated-file-size">${formatFileSize(batch.size)} • ${batch.recordCount} records</div>
             </div>
-        `).join('') + `<p style="margin-top: 16px; color: var(--text-secondary);">Files downloaded to your Downloads folder</p>`;
+        `}).join('') + `<p style="margin-top: 16px; color: var(--text-secondary);">Click file names above to download if automatic download was blocked</p>`;
 
     } catch (error) {
         console.error('Generation error:', error);
