@@ -5,17 +5,37 @@
 
 // Mandatory fields that must have values
 const MANDATORY_FIELDS = [
+    // Instrument Information
     'refNo',
     'instrumentDate',
-    'instrumentDateReceive',
     'principal',
-    'typeOfInstrument',
+    'typeOfInstrumentOthers',
+
+    // Transferor (Provider) - Basic Info
     'transferor.type',
     'transferor.name',
+
+    // Transferor - Address & Contact
+    'transferor.street1',
+    'transferor.street2',
+    'transferor.postcode',
+    'transferor.city',
+    'transferor.state',
+    'transferor.country',
+    'transferor.telNo',
+
+    // Transferee (Recipient) - Basic Info
     'transferee.type',
     'transferee.name',
-    'consideration',
-    'noOfCopy'
+
+    // Transferee - Address & Contact
+    'transferee.street1',
+    'transferee.street2',
+    'transferee.postcode',
+    'transferee.city',
+    'transferee.state',
+    'transferee.country',
+    'transferee.telNo'
 ];
 
 // Date format regex
@@ -102,25 +122,56 @@ export async function validateAll(mappedData, attachmentFiles) {
         // Validate transferor based on type
         if (record.transferor) {
             const type = record.transferor.type;
-            if (type === '0' || type === 0) {
-                // Individual - check IC or Passport
-                if (!record.transferor.icNo && !record.transferor.pasportNo) {
-                    rowWarnings.push({
-                        rowNumber,
-                        fieldName: 'transferor.icNo',
-                        errorType: 'MISSING_ID',
-                        message: 'Individual transferor should have IC or Passport number'
-                    });
-                }
-            } else if (type === '1' || type === 1) {
-                // Company - check ROC
+            if (type === '1' || type === 1) {
+                // Company - require ROC and Business Type
                 if (!record.transferor.rocNo) {
-                    rowWarnings.push({
+                    rowErrors.push({
                         rowNumber,
                         fieldName: 'transferor.rocNo',
-                        errorType: 'MISSING_ID',
-                        message: 'Company transferor should have ROC number'
+                        errorType: 'MISSING_FIELD',
+                        message: 'Company transferor requires ROC Number'
                     });
+                }
+                if (!record.transferor.busType) {
+                    rowErrors.push({
+                        rowNumber,
+                        fieldName: 'transferor.busType',
+                        errorType: 'MISSING_FIELD',
+                        message: 'Company transferor requires Business Type (1=Local, 2=Foreign)'
+                    });
+                }
+            } else if (type === '0' || type === 0) {
+                // Individual - check if citizen (has IC) or non-citizen (has passport)
+                const hasIC = record.transferor.icNo;
+                const hasPassport = record.transferor.passportNo;
+
+                if (!hasIC && !hasPassport) {
+                    rowErrors.push({
+                        rowNumber,
+                        fieldName: 'transferor.icNo',
+                        errorType: 'MISSING_FIELD',
+                        message: 'Individual transferor requires IC Number (citizen) or Passport (non-citizen)'
+                    });
+                } else if (hasIC) {
+                    // Citizen - require nationality
+                    if (!record.transferor.nationality) {
+                        rowErrors.push({
+                            rowNumber,
+                            fieldName: 'transferor.nationality',
+                            errorType: 'MISSING_FIELD',
+                            message: 'Citizen transferor requires Nationality (set to 1)'
+                        });
+                    }
+                } else if (hasPassport) {
+                    // Non-citizen - require passport country
+                    if (!record.transferor.passportCountry) {
+                        rowErrors.push({
+                            rowNumber,
+                            fieldName: 'transferor.passportCountry',
+                            errorType: 'MISSING_FIELD',
+                            message: 'Non-citizen transferor requires Passport Country Code'
+                        });
+                    }
                 }
             }
         }
@@ -128,23 +179,56 @@ export async function validateAll(mappedData, attachmentFiles) {
         // Validate transferee based on type
         if (record.transferee) {
             const type = record.transferee.type;
-            if (type === '0' || type === 0) {
-                if (!record.transferee.icNo && !record.transferee.pasportNo) {
-                    rowWarnings.push({
-                        rowNumber,
-                        fieldName: 'transferee.icNo',
-                        errorType: 'MISSING_ID',
-                        message: 'Individual transferee should have IC or Passport number'
-                    });
-                }
-            } else if (type === '1' || type === 1) {
+            if (type === '1' || type === 1) {
+                // Company - require ROC and Business Type
                 if (!record.transferee.rocNo) {
-                    rowWarnings.push({
+                    rowErrors.push({
                         rowNumber,
                         fieldName: 'transferee.rocNo',
-                        errorType: 'MISSING_ID',
-                        message: 'Company transferee should have ROC number'
+                        errorType: 'MISSING_FIELD',
+                        message: 'Company transferee requires ROC Number'
                     });
+                }
+                if (!record.transferee.busType) {
+                    rowErrors.push({
+                        rowNumber,
+                        fieldName: 'transferee.busType',
+                        errorType: 'MISSING_FIELD',
+                        message: 'Company transferee requires Business Type (1=Local, 2=Foreign)'
+                    });
+                }
+            } else if (type === '0' || type === 0) {
+                // Individual - check if citizen (has IC) or non-citizen (has passport)
+                const hasIC = record.transferee.icNo;
+                const hasPassport = record.transferee.passportNo;
+
+                if (!hasIC && !hasPassport) {
+                    rowErrors.push({
+                        rowNumber,
+                        fieldName: 'transferee.icNo',
+                        errorType: 'MISSING_FIELD',
+                        message: 'Individual transferee requires IC Number (citizen) or Passport (non-citizen)'
+                    });
+                } else if (hasIC) {
+                    // Citizen - require nationality
+                    if (!record.transferee.nationality) {
+                        rowErrors.push({
+                            rowNumber,
+                            fieldName: 'transferee.nationality',
+                            errorType: 'MISSING_FIELD',
+                            message: 'Citizen transferee requires Nationality (set to 1)'
+                        });
+                    }
+                } else if (hasPassport) {
+                    // Non-citizen - require passport country
+                    if (!record.transferee.passportCountry) {
+                        rowErrors.push({
+                            rowNumber,
+                            fieldName: 'transferee.passportCountry',
+                            errorType: 'MISSING_FIELD',
+                            message: 'Non-citizen transferee requires Passport Country Code'
+                        });
+                    }
                 }
             }
         }
@@ -195,19 +279,49 @@ function getNestedValue(obj, path) {
  */
 function getFieldDisplayName(fieldPath) {
     const displayNames = {
+        // Instrument Information
         'refNo': 'Reference Number',
         'instrumentDate': 'Date Signed',
         'instrumentDateReceive': 'Date Received',
-        'principal': 'Principal',
+        'principal': 'Principal/Subsidiary',
+        'typeOfInstrumentOthers': 'Agreement Name',
         'typeOfInstrument': 'Instrument Type',
+
+        // Transferor
         'transferor.type': 'Transferor Type',
         'transferor.name': 'Transferor Name',
         'transferor.icNo': 'Transferor IC',
         'transferor.rocNo': 'Transferor ROC',
+        'transferor.busType': 'Transferor Business Type',
+        'transferor.nationality': 'Transferor Nationality',
+        'transferor.passportNo': 'Transferor Passport',
+        'transferor.passportCountry': 'Transferor Passport Country',
+        'transferor.street1': 'Transferor Address Line 1',
+        'transferor.street2': 'Transferor Address Line 2',
+        'transferor.postcode': 'Transferor Postcode',
+        'transferor.city': 'Transferor City',
+        'transferor.state': 'Transferor State',
+        'transferor.country': 'Transferor Country',
+        'transferor.telNo': 'Transferor Phone',
+
+        // Transferee
         'transferee.type': 'Transferee Type',
         'transferee.name': 'Transferee Name',
         'transferee.icNo': 'Transferee IC',
         'transferee.rocNo': 'Transferee ROC',
+        'transferee.busType': 'Transferee Business Type',
+        'transferee.nationality': 'Transferee Nationality',
+        'transferee.passportNo': 'Transferee Passport',
+        'transferee.passportCountry': 'Transferee Passport Country',
+        'transferee.street1': 'Transferee Address Line 1',
+        'transferee.street2': 'Transferee Address Line 2',
+        'transferee.postcode': 'Transferee Postcode',
+        'transferee.city': 'Transferee City',
+        'transferee.state': 'Transferee State',
+        'transferee.country': 'Transferee Country',
+        'transferee.telNo': 'Transferee Phone',
+
+        // Other
         'consideration': 'Consideration Amount',
         'noOfCopy': 'Number of Copies',
         'attachment': 'Attachment'
