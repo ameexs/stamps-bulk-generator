@@ -7,6 +7,9 @@ import { parseFile, getPreviewHeaders, getPreviewRow } from './parser.js';
 import { validateAll } from './validator.js';
 import { generateXml, formatFileSize } from './generator.js';
 
+// Electron detection
+const isElectron = window.electronAPI && window.electronAPI.isElectron;
+
 // Application State
 const state = {
     currentStep: 1,
@@ -31,8 +34,37 @@ const elements = {};
 async function init() {
     cacheElements();
     bindEvents();
+
+    if (isElectron) {
+        console.log('Running in Electron mode');
+        setupElectronHandlers();
+    } else {
+        console.log('Running in browser mode');
+    }
+
     console.log('STAMPS Bulk Generator initialized');
 }
+
+/**
+ * Setup Electron-specific handlers
+ */
+function setupElectronHandlers() {
+    // Listen for update events
+    if (window.electronAPI.onUpdateAvailable) {
+        window.electronAPI.onUpdateAvailable(() => {
+            console.log('Update available, downloading...');
+        });
+    }
+
+    if (window.electronAPI.onUpdateDownloaded) {
+        window.electronAPI.onUpdateDownloaded(() => {
+            if (confirm('A new update is ready. Restart to install?')) {
+                window.electronAPI.installUpdate();
+            }
+        });
+    }
+}
+
 
 /**
  * Cache DOM elements

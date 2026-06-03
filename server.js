@@ -3,19 +3,13 @@
  * Express.js backend for file operations
  */
 
-import express from 'express';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import open from 'open';
-import { generateTemplate } from './template-generator.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { generateTemplate } = require('./template-generator.js');
 
 const app = express();
-const PORT = process.env.PORT || 3847;
 
 // Data storage path
 const dataDir = path.join(__dirname, 'data');
@@ -228,14 +222,43 @@ app.get('/api/template/download', (req, res) => {
     }
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`\n✨ STAMPS Bulk Generator is running!`);
-    console.log(`\n📂 Open your browser to: http://localhost:${PORT}`);
+// App info endpoint (for Electron)
+app.get('/api/app/info', (req, res) => {
+    res.json({
+        name: 'STAMPS Bulk Generator',
+        version: require('./package.json').version
+    });
+});
+
+/**
+ * Start the server
+ * @param {number} port - Port to listen on
+ * @returns {object} - Server instance
+ */
+function startServer(port = 3847) {
+    const server = app.listen(port, () => {
+        console.log(`\n✨ STAMPS Bulk Generator is running!`);
+        console.log(`\n📂 Server listening on port ${port}`);
+    });
+    return server;
+}
+
+// If run directly (not imported), start the server
+if (require.main === module) {
+    const PORT = process.env.PORT || 3847;
+    startServer(PORT);
+
+    console.log(`\n   Open your browser to: http://localhost:${PORT}`);
     console.log(`\n   Press Ctrl+C to stop the server.\n`);
 
     // Auto-open browser only in local development (not in cloud/production)
     if (!process.env.PORT && !process.env.RAILWAY_ENVIRONMENT && !process.env.RENDER) {
-        open(`http://localhost:${PORT}`);
+        import('open').then(open => {
+            open.default(`http://localhost:${PORT}`);
+        }).catch(() => {
+            // open package might not be available, that's ok
+        });
     }
-});
+}
+
+module.exports = { app, startServer };

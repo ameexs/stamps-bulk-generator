@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAMPS Bulk Generator | Automate Your Stamp Duty Submissions</title>
+    <meta name="description"
+        content="Transform your Excel data into STAMPS-compliant XML files in seconds. Save hours on stamp duty submissions with Malaysia's most powerful bulk generation tool.">
+    <meta name="keywords" content="STAMPS, LHDN, stamp duty, bulk generator, XML, Malaysia, duti setem">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                </div>
+                <span class="brand-text">STAMPS Generator</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact" class="btn btn-nav">Get Started</a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="badge">
+                    <span class="badge-icon">🇲🇾</span>
+                    Built for Malaysian Businesses
+                </div>
+                <h1>Bulk Stamp Duty Submissions <span class="gradient-text">Made Effortless</span></h1>
+                <p class="hero-subtitle">Transform your Excel spreadsheets into STAMPS-compliant XML files in seconds.
+                    Stop wasting hours on manual data entry.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">100+</span>
+                        <span class="stat-label">Records in Minutes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">&lt;1%</span>
+                        <span class="stat-label">Error Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">90%</span>
+                        <span class="stat-label">Time Saved</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="https://github.com/ameexs/stamps-bulk-generator/releases/latest" target="_blank"
+                        class="btn btn-primary btn-lg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download v1.0.0
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline btn-lg">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="app-preview">
+                    <div class="app-window">
+                        <div class="window-header">
+                            <div class="window-controls">
+                                <span class="control close"></span>
+                                <span class="control minimize"></span>
+                                <span class="control maximize"></span>
+                            </div>
+                            <span class="window-title">STAMPS Bulk Generator</span>
+                        </div>
+                        <div class="window-content">
+                            <div class="preview-steps">
+                                <div class="preview-step active">
+                                    <div class="step-num">1</div>
+                                    <span>Upload Excel</span>
+                                </div>
+                                <div class="preview-step">
+                                    <div class="step-num">2</div>
+                                    <span>Validate</span>
+                                </div>
+                                <div class="preview-step">
+                                    <div class="step-num">3</div>
+                                    <span>Generate</span>
+                                </div>
+                            </div>
+                            <div class="preview-animation">
+                                <div class="excel-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                </div>
+                                <div class="arrow">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12" />
+                                        <polyline points="12 5 19 12 12 19" />
+                                    </svg>
+                                </div>
+                                <div class="xml-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="16 18 22 12 16 6" />
+                                        <polyline points="8 6 2 12 8 18" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Trusted By Section -->
+    <section class="trusted-by">
+        <div class="container">
+            <p class="trusted-label">Ideal for</p>
+            <div class="trusted-list">
+                <span>Legal Firms</span>
+                <span class="divider">•</span>
+                <span>Banks & Financial Institutions</span>
+                <span class="divider">•</span>
+                <span>Corporate Secretarial</span>
+                <span class="divider">•</span>
+                <span>Property Developers</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="problem-content">
+                <h2>Still Doing <span class="text-danger">Manual Data Entry?</span></h2>
+                <p class="section-subtitle">The old way of submitting stamp duty is costing you time and money.</p>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <div class="problem-icon">⏰</div>
+                        <h3>5-10 Minutes Per Record</h3>
+                        <p>Manual entry into STAMPS portal for each instrument takes valuable staff time</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">❌</div>
+                        <h3>5-10% Error Rate</h3>
+                        <p>Human errors lead to rejected submissions and costly delays</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">📎</div>
+                        <h3>Complex Attachments</h3>
+                        <p>Base64 encoding of PDFs is technical and error-prone</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">📚</div>
+                        <h3>Learning Curve</h3>
+                        <p>Understanding XML structure and STAMPS specifications takes time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Features</span>
+                <h2>Everything You Need for <span class="gradient-text">Bulk Submissions</span></h2>
+                <p class="section-subtitle">Powerful features designed for high-volume stamp duty processing</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card featured">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <h3>Excel & CSV Import</h3>
+                    <p>Upload your existing spreadsheets. We support .xlsx, .xls, and .csv formats with intelligent
+                        column mapping.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <h3>Smart Validation</h3>
+                    <p>Catch errors before submission. Validates IC formats, dates, Lampiran codes, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                        </svg>
+                    </div>
+                    <h3>Attachment Handling</h3>
+                    <p>Automatically converts PDFs and images to base64. No technical knowledge required.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                    </div>
+                    <h3>Smart Batching</h3>
+                    <p>Automatically splits large datasets into 50-record batches per STAMPS requirements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </div>
+                    <h3>100% Offline</h3>
+                    <p>Works completely offline. Your sensitive data never leaves your computer.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                    </div>
+                    <h3>STAMPS Compliant</h3>
+                    <p>Generates XML files that fully comply with LHDN STAMPS specifications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Simple Process</span>
+                <h2>Get Started in <span class="gradient-text">3 Easy Steps</span></h2>
+                <p class="section-subtitle">From Excel to STAMPS-ready XML in minutes</p>
+            </div>
+            <div class="steps-timeline">
+                <div class="step-item">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Prepare Your Data</h3>
+                        <p>Download our Excel template and fill in your stamp duty data. All column headers are
+                            pre-configured for STAMPS compatibility.</p>
+                        <ul class="step-list">
+                            <li>Pre-built template with all required fields</li>
+                            <li>Code reference sheets included</li>
+                            <li>Works with existing spreadsheets</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Upload & Validate</h3>
+                        <p>Import your Excel file and let our system validate every record. Fix any issues before
+                            generating.</p>
+                        <ul class="step-list">
+                            <li>Instant error detection</li>
+                            <li>Clear error messages with row numbers</li>
+                            <li>Attachment matching</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Generate & Download</h3>
+                        <p>Generate STAMPS-compliant XML files and download them to your computer. Ready to upload to
+                            the STAMPS portal.</p>
+                        <ul class="step-list">
+                            <li>Auto-batching for large datasets</li>
+                            <li>Embedded attachments</li>
+                            <li>Ready for STAMPS portal upload</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Pricing</span>
+                <h2>Simple, Transparent <span class="gradient-text">Pricing</span></h2>
+                <p class="section-subtitle">One-time purchase. No subscriptions. No hidden fees.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-badge">Essential</div>
+                    <div class="pricing-price">
+                        <span class="currency">RM</span>
+                        <span class="amount">2,499</span>
+                        <span class="period">one-time</span>
+                    </div>
+                    <p class="pricing-description">Perfect for small legal firms and corporate secretarial offices</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Single workstation license
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            All core features
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Excel template included
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            6 months free updates
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Email support
+                        </li>
+                    </ul>
+                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%20want%20to%20purchase%20STAMPS%20Bulk%20Generator%20-%20Essential%20Plan%20(RM%202%2C499).%20Please%20share%20the%20bank%20details%20for%20online%20transfer."
+                        target="_blank" class="btn btn-outline btn-block">Order via WhatsApp</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-popular">Most Popular</div>
+                    <div class="pricing-badge">Professional</div>
+                    <div class="pricing-price">
+                        <span class="currency">RM</span>
+                        <span class="amount">4,999</span>
+                        <span class="period">one-time</span>
+                    </div>
+                    <p class="pricing-description">Ideal for established firms processing high volumes</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Up to 5 workstation licenses
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            All core features
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Priority email & phone support
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            12 months free updates
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Remote installation support
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Custom template help
+                        </li>
+                    </ul>
+                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%20want%20to%20purchase%20STAMPS%20Bulk%20Generator%20-%20Professional%20Plan%20(RM%204%2C999).%20Please%20share%20the%20bank%20details%20for%20online%20transfer."
+                        target="_blank" class="btn btn-primary btn-block">Order via WhatsApp</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-badge">Enterprise</div>
+                    <div class="pricing-price">
+                        <span class="currency">RM</span>
+                        <span class="amount">9,999</span>
+                        <span class="period">one-time</span>
+                    </div>
+                    <p class="pricing-description">For large organizations with custom requirements</p>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Unlimited workstation licenses
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            All Professional features
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            On-site training (2 sessions)
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            24 months free updates
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Dedicated account manager
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Custom feature development
+                        </li>
+                    </ul>
+                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%27m%20interested%20in%20the%20STAMPS%20Bulk%20Generator%20-%20Enterprise%20Plan%20(RM%209%2C999).%20I%20would%20like%20to%20discuss%20requirements%20and%20payment%20options."
+                        target="_blank" class="btn btn-outline btn-block">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Save Hours Every Week?</h2>
+                <p>Join legal firms and corporations across Malaysia who have streamlined their stamp duty process.</p>
+                <div class="cta-actions">
+                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%27m%20interested%20in%20STAMPS%20Bulk%20Generator.%20Can%20you%20tell%20me%20more%3F"
+                        target="_blank" class="btn btn-primary btn-lg">Get Started Today</a>
+                    <a href="mailto:ameershafiq010@gmail.com" class="btn btn-ghost btn-lg">Request a Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Contact</span>
+                <h2>Get In <span class="gradient-text">Touch</span></h2>
+                <p class="section-subtitle">Have questions or ready to purchase? We'd love to hear from you.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:ameershafiq010@gmail.com">ameershafiq010@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Phone</h4>
+                            <a href="tel:+601123240319">+60 11-2324 0319</a>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Malaysia</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company Name</label>
+                        <input type="text" id="company" name="company" placeholder="Your company">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" required
+                            placeholder="Tell us about your needs..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <span>STAMPS Bulk Generator</span>
+                </div>
+                <p class="footer-copyright">© 2024 Ameer Shafiq. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

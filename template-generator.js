@@ -3,13 +3,13 @@
  * Generates a template Excel file with all required column headers
  */
 
-import XLSX from 'xlsx';
+const XLSX = require('xlsx');
 
 /**
  * Column definitions for the STAMPS template
  * Each column includes header name, XML mapping, data type, and example/notes
  */
-export const TEMPLATE_COLUMNS = [
+const TEMPLATE_COLUMNS = [
     // Basic Information
     { header: 'Ref No', xmlTag: '<refNo>', dataType: 'Text', example: 'REF001', notes: 'Unique reference number' },
     { header: 'Date Signed', xmlTag: '<instrumentDate>', dataType: 'Date (DD/MM/YYYY)', example: '15/12/2024', notes: 'Date instrument was signed' },
@@ -84,7 +84,7 @@ export const TEMPLATE_COLUMNS = [
 /**
  * Generate Excel template buffer
  */
-export function generateTemplate() {
+function generateTemplate() {
     // Create workbook
     const wb = XLSX.utils.book_new();
 
@@ -340,3 +340,5 @@ export function generateTemplate() {
 
     return buffer;
 }
+
+module.exports = { generateTemplate, TEMPLATE_COLUMNS };
