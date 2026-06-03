@@ -3,7 +3,7 @@
  * Generates a template Excel file with all required column headers
  */
 
-const XLSX = require('xlsx');
+const XLSX = typeof require !== 'undefined' ? require('xlsx') : (typeof window !== 'undefined' ? window.XLSX : null);
 
 /**
  * Column definitions for the STAMPS template
@@ -335,10 +335,15 @@ function generateTemplate() {
 
     XLSX.utils.book_append_sheet(wb, instructionsSheet, 'Instructions');
 
-    // Generate buffer
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+    // Generate buffer/array based on platform
+    const writeType = (typeof process !== 'undefined' && process.release && process.release.name === 'node') ? 'buffer' : 'array';
+    const buffer = XLSX.write(wb, { type: writeType, bookType: 'xlsx' });
 
     return buffer;
 }
 
-module.exports = { generateTemplate, TEMPLATE_COLUMNS };
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { generateTemplate, TEMPLATE_COLUMNS };
+} else if (typeof window !== 'undefined') {
+    window.TemplateGenerator = { generateTemplate, TEMPLATE_COLUMNS };
+}

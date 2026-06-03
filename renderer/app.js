@@ -75,6 +75,7 @@ function cacheElements() {
     elements.stepContents = document.querySelectorAll('.step-content');
 
     // Step 1 - File Selection
+    elements.downloadTemplateBtn = document.getElementById('download-template-btn');
     elements.excelPath = document.getElementById('excel-path');
     elements.selectExcelBtn = document.getElementById('select-excel-btn');
     elements.excelCard = document.getElementById('excel-card');
@@ -127,6 +128,9 @@ function cacheElements() {
  */
 function bindEvents() {
     // Step 1 - File inputs
+    if (elements.downloadTemplateBtn) {
+        elements.downloadTemplateBtn.addEventListener('click', handleTemplateDownload);
+    }
     elements.selectExcelBtn.addEventListener('click', () => {
         elements.excelFileInput.click();
     });
@@ -168,41 +172,24 @@ async function handleExcelUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
-        console.log('Uploading file:', file.name);
-        const res = await fetch('/api/upload/excel', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await res.json();
+        console.log('Reading Excel file locally:', file.name);
+        state.excelFile = file.name;
+        
+        // Read file content as base64 locally (re-used during XML generation if needed)
+        state.excelData = await readFileAsBase64(file);
 
-        if (result.error) {
-            alert('Error uploading file: ' + result.error);
-            return;
-        }
+        // Read file content as array buffer locally for SheetJS parsing
+        const arrayBuffer = await file.arrayBuffer();
 
-        console.log('File uploaded successfully, parsing...');
-        state.excelFile = result.filename;
-        state.excelData = result.data;
-
-        // Decode base64 and parse
-        const binary = atob(result.data);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-        }
-
-        console.log('Calling parseFile...');
-        const parsed = await parseFile(bytes.buffer, result.filename);
+        console.log('Parsing file in-browser...');
+        const parsed = await parseFile(arrayBuffer, file.name);
         console.log('Parsed data:', parsed);
 
         state.parsedData = parsed.rows;
         state.mappedData = parsed.mappedData;
 
-        elements.excelPath.textContent = result.filename;
+        elements.excelPath.textContent = file.name;
         elements.excelCard.classList.add('selected');
 
         // Extract required attachments from parsed data
@@ -218,9 +205,31 @@ async function handleExcelUpload(e) {
 
         updateProceedButton();
     } catch (error) {
-        console.error('Upload/Parse error:', error);
+        console.error('Excel parse error:', error);
         console.error('Error stack:', error.stack);
-        alert('Error uploading file: ' + error.message);
+        alert('Error parsing file: ' + error.message);
+    }
+}
+
+/**
+ * Handle Excel template generation and download client-side
+ */
+function handleTemplateDownload() {
+    try {
+        console.log('Generating Excel template in-browser...');
+        if (!window.TemplateGenerator) {
+            throw new Error('TemplateGenerator library not loaded. Please refresh the page.');
+        }
+        const buffer = window.TemplateGenerator.generateTemplate();
+        
+        // buffer is a Uint8Array in browser SheetJS (since type is 'array')
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        
+        downloadFile('STAMPS_Template.xlsx', blob, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        console.log('Template downloaded successfully');
+    } catch (error) {
+        console.error('Failed to generate template:', error);
+        alert('Failed to generate template: ' + error.message);
     }
 }
 

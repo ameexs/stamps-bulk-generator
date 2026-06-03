@@ -7,7 +7,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { generateTemplate } = require('./template-generator.js');
+const { generateTemplate } = require('./renderer/template-generator.js');
 
 const app = express();
 

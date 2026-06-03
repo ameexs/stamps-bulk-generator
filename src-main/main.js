@@ -41,11 +41,8 @@ function createWindow() {
         backgroundColor: '#0a0a0a'
     });
 
-    // Start the Express server
-    startServer();
-
-    // Load the app
-    mainWindow.loadURL(`http://localhost:${PORT}`);
+    // Load the app directly from local file (serverless mode)
+    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
     // Show window when ready
     mainWindow.once('ready-to-show', () => {
