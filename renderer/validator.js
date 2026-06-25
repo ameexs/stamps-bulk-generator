@@ -35,7 +35,11 @@ const MANDATORY_FIELDS = [
     'transferee.city',
     'transferee.state',
     'transferee.country',
-    'transferee.telNo'
+    'transferee.telNo',
+
+    // Instrument details (Wajib! per LHDN spec)
+    'consideration',
+    'duration'
 ];
 
 // Date format regex
@@ -143,7 +147,7 @@ export async function validateAll(mappedData, attachmentFiles) {
             } else if (type === '0' || type === 0) {
                 // Individual - check if citizen (has IC) or non-citizen (has passport)
                 const hasIC = record.transferor.icNo;
-                const hasPassport = record.transferor.passportNo;
+                const hasPassport = record.transferor.pasportNo;
 
                 if (!hasIC && !hasPassport) {
                     rowErrors.push({
@@ -164,7 +168,7 @@ export async function validateAll(mappedData, attachmentFiles) {
                     }
                 } else if (hasPassport) {
                     // Non-citizen - require passport country
-                    if (!record.transferor.passportCountry) {
+                    if (!record.transferor.pasportCountry) {
                         rowErrors.push({
                             rowNumber,
                             fieldName: 'transferor.passportCountry',
@@ -200,7 +204,7 @@ export async function validateAll(mappedData, attachmentFiles) {
             } else if (type === '0' || type === 0) {
                 // Individual - check if citizen (has IC) or non-citizen (has passport)
                 const hasIC = record.transferee.icNo;
-                const hasPassport = record.transferee.passportNo;
+                const hasPassport = record.transferee.pasportNo;
 
                 if (!hasIC && !hasPassport) {
                     rowErrors.push({
@@ -221,7 +225,7 @@ export async function validateAll(mappedData, attachmentFiles) {
                     }
                 } else if (hasPassport) {
                     // Non-citizen - require passport country
-                    if (!record.transferee.passportCountry) {
+                    if (!record.transferee.pasportCountry) {
                         rowErrors.push({
                             rowNumber,
                             fieldName: 'transferee.passportCountry',
@@ -323,6 +327,7 @@ function getFieldDisplayName(fieldPath) {
 
         // Other
         'consideration': 'Consideration Amount',
+        'duration': 'Duration Fixed (1=Yes, 2=No)',
         'noOfCopy': 'Number of Copies',
         'attachment': 'Attachment'
     };

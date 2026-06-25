@@ -3,6 +3,7 @@
  * Generates a template Excel file with all required column headers
  */
 
+(function () {
 const XLSX = typeof require !== 'undefined' ? require('xlsx') : (typeof window !== 'undefined' ? window.XLSX : null);
 
 /**
@@ -17,7 +18,7 @@ const TEMPLATE_COLUMNS = [
     { header: 'Principal (-1) / Sub (0)', xmlTag: '<principal>', dataType: 'Number', example: '-1', notes: '-1 = Principal, 0 = Subsidiary' },
     { header: 'Subsidiary Ref', xmlTag: '<subsidiary>', dataType: 'Number', example: '0', notes: 'Subsidiary reference number' },
     { header: 'Instrument Type Code', xmlTag: '<typeOfInstrument>', dataType: 'Number', example: '1', notes: 'Instrument type code' },
-    { header: 'Other Instrument (Desc)', xmlTag: '<typeOfInstrumentOthers>', dataType: 'Text', example: '', notes: 'Description if Other type' },
+    { header: 'Other Instrument (Desc)', xmlTag: '<typeOfInstrumentOthers>', dataType: 'Text', example: 'Loan Agreement', notes: 'Required: name/description of the instrument' },
 
     // TRANSFEROR (Pihak 1)
     { header: 'Transferor Type', xmlTag: '<transferor><type>', dataType: 'Number', example: '0', notes: '0=Individual, 1=Company' },
@@ -78,7 +79,7 @@ const TEMPLATE_COLUMNS = [
     { header: 'Remission Others', xmlTag: '<remessionOthers>', dataType: 'Text', example: '', notes: 'Remission description' },
 
     // ATTACHMENT
-    { header: 'Attachment Filename', xmlTag: '<attachment>', dataType: 'Text', example: 'document.pdf', notes: 'Filename in Attachments folder' }
+    { header: 'Attachment Filename', xmlTag: '<attachment>', dataType: 'Text', example: '', notes: 'Optional: PDF/JPG filename you upload in the next step' }
 ];
 
 /**
@@ -136,13 +137,13 @@ function generateTemplate() {
         ['4', 'Melaka', ''],
         ['5', 'Negeri Sembilan', ''],
         ['6', 'Pahang', ''],
-        ['7', 'Pulau Pinang', ''],
-        ['8', 'Perak', ''],
-        ['9', 'Perlis', ''],
-        ['10', 'Selangor', ''],
-        ['11', 'Terengganu', ''],
-        ['12', 'Sabah', ''],
-        ['13', 'Sarawak', ''],
+        ['7', 'Perak', ''],
+        ['8', 'Perlis', ''],
+        ['9', 'Pulau Pinang', ''],
+        ['10', 'Sabah', ''],
+        ['11', 'Sarawak', ''],
+        ['12', 'Selangor', ''],
+        ['13', 'Terengganu', ''],
         ['14', 'Wilayah Persekutuan KL', ''],
         ['15', 'Wilayah Persekutuan Labuan', ''],
         ['16', 'Wilayah Persekutuan Putrajaya', ''],
@@ -174,7 +175,7 @@ function generateTemplate() {
         ['0', 'Subsidiary', ''],
         ['', '', ''],
         ['COUNTRY CODE (Malaysia)', '', ''],
-        ['458', 'Malaysia', '']
+        ['146', 'Malaysia', '']
     ];
 
     const codesSheet = XLSX.utils.aoa_to_sheet(codesData);
@@ -347,3 +348,4 @@ if (typeof module !== 'undefined' && module.exports) {
 } else if (typeof window !== 'undefined') {
     window.TemplateGenerator = { generateTemplate, TEMPLATE_COLUMNS };
 }
+})();
