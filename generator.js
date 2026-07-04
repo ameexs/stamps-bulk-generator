@@ -1,14 +1,28 @@
 /**
  * XML Generator Module
- * Generates STAMPS-compliant XML with smart batching
+ * Generates STAMPS-compliant XML with smart batching.
+ * Supports two application types:
+ *   - 'sekuriti' -> applicationType 43 (Penyeteman Sekuriti)
+ *   - 'am'       -> applicationType 44 (Penyeteman Am)
  */
 
 // Maximum batch size in bytes (29MB for safety buffer)
 const MAX_BATCH_SIZE = 29 * 1024 * 1024;
 
-// XML header and footer
-const XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n<bulkstamping>\n    <applicationType>43</applicationType>';
+// Application type codes per LHDN spec
+const APPLICATION_TYPE = { sekuriti: '43', am: '44' };
+
 const XML_FOOTER = '\n</bulkstamping>';
+
+/**
+ * Build the XML header for a given mode.
+ * @param {string} mode - 'sekuriti' | 'am'
+ * @returns {string}
+ */
+function buildXmlHeader(mode) {
+    const appType = APPLICATION_TYPE[mode] || APPLICATION_TYPE.sekuriti;
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<bulkstamping>\n    <applicationType>${appType}</applicationType>`;
+}
 
 /**
  * Generate XML files from mapped data
@@ -16,13 +30,15 @@ const XML_FOOTER = '\n</bulkstamping>';
  * @param {Map} attachmentFiles - Map of filename -> attachment data
  * @param {Function} getAttachmentBase64 - Function to get attachment base64 data by filename
  * @param {Function} progressCallback - Progress callback function
+ * @param {string} mode - 'sekuriti' (43) | 'am' (44). Defaults to 'sekuriti'.
  * @returns {Array} Array of generated XML objects { filename, content, size, recordCount }
  */
-export async function generateXml(mappedData, attachmentFiles, getAttachmentBase64, progressCallback) {
+export async function generateXml(mappedData, attachmentFiles, getAttachmentBase64, progressCallback, mode = 'sekuriti') {
+    const header = buildXmlHeader(mode);
     const batches = [];
     let currentBatch = {
         instruments: [],
-        size: XML_HEADER.length + XML_FOOTER.length,
+        size: header.length + XML_FOOTER.length,
         recordCount: 0
     };
 
@@ -32,18 +48,18 @@ export async function generateXml(mappedData, attachmentFiles, getAttachmentBase
         const record = mappedData[i];
 
         // Generate instrument XML
-        const instrumentXml = generateInstrumentXml(record, getAttachmentBase64);
+        const instrumentXml = generateInstrumentXml(record, getAttachmentBase64, mode);
         const instrumentSize = new Blob([instrumentXml]).size;
 
         // Check if adding this instrument would exceed batch size
         if (currentBatch.size + instrumentSize > MAX_BATCH_SIZE && currentBatch.instruments.length > 0) {
             // Finalize current batch
-            batches.push(finalizeBatch(currentBatch, batches.length + 1));
+            batches.push(finalizeBatch(currentBatch, batches.length + 1, header));
 
             // Start new batch
             currentBatch = {
                 instruments: [],
-                size: XML_HEADER.length + XML_FOOTER.length,
+                size: header.length + XML_FOOTER.length,
                 recordCount: 0
             };
         }
@@ -66,7 +82,7 @@ export async function generateXml(mappedData, attachmentFiles, getAttachmentBase
 
     // Finalize last batch
     if (currentBatch.instruments.length > 0) {
-        batches.push(finalizeBatch(currentBatch, batches.length + 1));
+        batches.push(finalizeBatch(currentBatch, batches.length + 1, header));
     }
 
     return batches;
@@ -76,10 +92,11 @@ export async function generateXml(mappedData, attachmentFiles, getAttachmentBase
  * Finalize a batch into XML content
  * @param {Object} batch - Batch object
  * @param {number} batchNumber - Batch number
+ * @param {string} header - XML header for the active mode
  * @returns {Object} Finalized batch
  */
-function finalizeBatch(batch, batchNumber) {
-    const content = XML_HEADER + batch.instruments.join('') + XML_FOOTER;
+function finalizeBatch(batch, batchNumber, header) {
+    const content = header + batch.instruments.join('') + XML_FOOTER;
 
     return {
         filename: batchNumber === 1 ? 'Output.xml' : `Output_Batch_${batchNumber}.xml`,
@@ -90,12 +107,13 @@ function finalizeBatch(batch, batchNumber) {
 }
 
 /**
- * Generate XML for a single instrument
+ * Generate XML for a single instrument, dispatching by mode.
  * @param {Object} record - Mapped record data
  * @param {Function} getAttachmentBase64 - Function to get attachment base64 by filename
+ * @param {string} mode - 'sekuriti' | 'am'
  * @returns {string} Instrument XML string
  */
-function generateInstrumentXml(record, getAttachmentBase64) {
+function generateInstrumentXml(record, getAttachmentBase64, mode) {
     let attachmentBase64 = '';
     let attachmentName = record.attachment || '';
 
@@ -107,7 +125,48 @@ function generateInstrumentXml(record, getAttachmentBase64) {
         }
     }
 
-    const xml = `
+    if (mode === 'am') {
+        return amInstrumentXml(record, attachmentName, attachmentBase64);
+    }
+    return sekuritiInstrumentXml(record, attachmentName, attachmentBase64);
+}
+
+/**
+ * Shared transferor/transferee block (identical structure in both modes).
+ * @param {string} tag - 'transferor' | 'transferee'
+ * @param {Object} p - party data
+ * @returns {string}
+ */
+function partyBlock(tag, p) {
+    p = p || {};
+    return `        <${tag}>
+            <type>${escapeXml(p.type || '')}</type>
+            <name>${escapeXml(p.name || '')}</name>
+            <nationality>${escapeXml(p.nationality || '')}</nationality>
+            <icNo>${escapeXml(p.icNo || '')}</icNo>
+            <pasportNo>${escapeXml(p.pasportNo || '')}</pasportNo>
+            <pasportCountry>${escapeXml(p.pasportCountry || '')}</pasportCountry>
+            <rocNo>${escapeXml(p.rocNo || '')}</rocNo>
+            <busType>${escapeXml(p.busType || '')}</busType>
+            <incomeTaxNo>${escapeXml(p.incomeTaxNo || '')}</incomeTaxNo>
+            <incomeTaxBranch>${escapeXml(p.incomeTaxBranch || '')}</incomeTaxBranch>
+            <street1>${escapeXml(p.street1 || '')}</street1>
+            <street2>${escapeXml(p.street2 || '')}</street2>
+            <street3>${escapeXml(p.street3 || '')}</street3>
+            <postcode>${escapeXml(p.postcode || '')}</postcode>
+            <city>${escapeXml(p.city || '')}</city>
+            <state>${escapeXml(p.state || '')}</state>
+            <country>${escapeXml(p.country || '')}</country>
+            <telNo>${escapeXml(p.telNo || '')}</telNo>
+            <email>${escapeXml(p.email || '')}</email>
+        </${tag}>`;
+}
+
+/**
+ * Penyeteman Sekuriti (applicationType 43) instrument body.
+ */
+function sekuritiInstrumentXml(record, attachmentName, attachmentBase64) {
+    return `
     <instrument>
         <refNo>${escapeXml(record.refNo || '')}</refNo>
         <instrumentDate>${escapeXml(record.instrumentDate || '')}</instrumentDate>
@@ -116,48 +175,8 @@ function generateInstrumentXml(record, getAttachmentBase64) {
         <subsidiary>${escapeXml(record.subsidiary || '')}</subsidiary>
         <typeOfInstrument>${escapeXml(record.typeOfInstrument || '')}</typeOfInstrument>
         <typeOfInstrumentOthers>${escapeXml(record.typeOfInstrumentOthers || '')}</typeOfInstrumentOthers>
-        <transferor>
-            <type>${escapeXml(record.transferor?.type || '')}</type>
-            <name>${escapeXml(record.transferor?.name || '')}</name>
-            <nationality>${escapeXml(record.transferor?.nationality || '')}</nationality>
-            <icNo>${escapeXml(record.transferor?.icNo || '')}</icNo>
-            <pasportNo>${escapeXml(record.transferor?.pasportNo || '')}</pasportNo>
-            <pasportCountry>${escapeXml(record.transferor?.pasportCountry || '')}</pasportCountry>
-            <rocNo>${escapeXml(record.transferor?.rocNo || '')}</rocNo>
-            <busType>${escapeXml(record.transferor?.busType || '')}</busType>
-            <incomeTaxNo>${escapeXml(record.transferor?.incomeTaxNo || '')}</incomeTaxNo>
-            <incomeTaxBranch>${escapeXml(record.transferor?.incomeTaxBranch || '')}</incomeTaxBranch>
-            <street1>${escapeXml(record.transferor?.street1 || '')}</street1>
-            <street2>${escapeXml(record.transferor?.street2 || '')}</street2>
-            <street3>${escapeXml(record.transferor?.street3 || '')}</street3>
-            <postcode>${escapeXml(record.transferor?.postcode || '')}</postcode>
-            <city>${escapeXml(record.transferor?.city || '')}</city>
-            <state>${escapeXml(record.transferor?.state || '')}</state>
-            <country>${escapeXml(record.transferor?.country || '')}</country>
-            <telNo>${escapeXml(record.transferor?.telNo || '')}</telNo>
-            <email>${escapeXml(record.transferor?.email || '')}</email>
-        </transferor>
-        <transferee>
-            <type>${escapeXml(record.transferee?.type || '')}</type>
-            <name>${escapeXml(record.transferee?.name || '')}</name>
-            <nationality>${escapeXml(record.transferee?.nationality || '')}</nationality>
-            <icNo>${escapeXml(record.transferee?.icNo || '')}</icNo>
-            <pasportNo>${escapeXml(record.transferee?.pasportNo || '')}</pasportNo>
-            <pasportCountry>${escapeXml(record.transferee?.pasportCountry || '')}</pasportCountry>
-            <rocNo>${escapeXml(record.transferee?.rocNo || '')}</rocNo>
-            <busType>${escapeXml(record.transferee?.busType || '')}</busType>
-            <incomeTaxNo>${escapeXml(record.transferee?.incomeTaxNo || '')}</incomeTaxNo>
-            <incomeTaxBranch>${escapeXml(record.transferee?.incomeTaxBranch || '')}</incomeTaxBranch>
-            <street1>${escapeXml(record.transferee?.street1 || '')}</street1>
-            <street2>${escapeXml(record.transferee?.street2 || '')}</street2>
-            <street3>${escapeXml(record.transferee?.street3 || '')}</street3>
-            <postcode>${escapeXml(record.transferee?.postcode || '')}</postcode>
-            <city>${escapeXml(record.transferee?.city || '')}</city>
-            <state>${escapeXml(record.transferee?.state || '')}</state>
-            <country>${escapeXml(record.transferee?.country || '')}</country>
-            <telNo>${escapeXml(record.transferee?.telNo || '')}</telNo>
-            <email>${escapeXml(record.transferee?.email || '')}</email>
-        </transferee>
+${partyBlock('transferor', record.transferor)}
+${partyBlock('transferee', record.transferee)}
         <consideration>${escapeXml(record.consideration || '')}</consideration>
         <duration>${escapeXml(record.duration || '')}</duration>
         <durationDesc>${escapeXml(record.durationDesc || '')}</durationDesc>
@@ -174,8 +193,29 @@ function generateInstrumentXml(record, getAttachmentBase64) {
         <remessionOthers>${escapeXml(record.remessionOthers || '')}</remessionOthers>
         <attachment name="${escapeXml(attachmentName)}">${attachmentBase64}</attachment>
     </instrument>`;
+}
 
-    return xml;
+/**
+ * Penyeteman Am (applicationType 44) instrument body (per LHDN spec 2.2).
+ * Am-only fields: remessionOrExemption (Pengecualian/Peremitan),
+ * payment (Bayaran/Balasan RM), aggrementInfo (Maklumat Perjanjian).
+ */
+function amInstrumentXml(record, attachmentName, attachmentBase64) {
+    return `
+    <instrument>
+        <refNo>${escapeXml(record.refNo || '')}</refNo>
+        <instrumentDate>${escapeXml(record.instrumentDate || '')}</instrumentDate>
+        <instrumentDateReceive>${escapeXml(record.instrumentDateReceive || '')}</instrumentDateReceive>
+        <typeOfInstrument>${escapeXml(record.typeOfInstrument || '')}</typeOfInstrument>
+        <typeOfInstrumentOthers>${escapeXml(record.typeOfInstrumentOthers || '')}</typeOfInstrumentOthers>
+${partyBlock('transferor', record.transferor)}
+${partyBlock('transferee', record.transferee)}
+        <noOfCopy>${escapeXml(record.noOfCopy || '')}</noOfCopy>
+        <remessionOrExemption>${escapeXml(record.remessionOrExemption || '')}</remessionOrExemption>
+        <payment>${escapeXml(record.payment || '')}</payment>
+        <aggrementInfo>${escapeXml(record.aggrementInfo || '')}</aggrementInfo>
+        <attachment name="${escapeXml(attachmentName)}">${attachmentBase64}</attachment>
+    </instrument>`;
 }
 
 /**
@@ -217,7 +257,7 @@ export function formatFileSize(bytes) {
  * @returns {number} Estimated size in bytes
  */
 export async function estimateTotalSize(mappedData, attachmentsPath, getFileSize) {
-    let totalSize = XML_HEADER.length + XML_FOOTER.length;
+    let totalSize = buildXmlHeader('sekuriti').length + XML_FOOTER.length;
 
     // Base XML size per record (rough estimate without attachments)
     const baseRecordSize = 3000; // ~3KB per record XML

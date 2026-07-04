@@ -93,6 +93,11 @@ const COLUMN_MAP = {
     'Remission Code': 'remession',
     'Remission Others': 'remessionOthers',
 
+    // Penyeteman Am (applicationType 44) specific fields
+    'Remission/Exemption': 'remessionOrExemption',
+    'Payment': 'payment',
+    'Agreement Info': 'aggrementInfo',
+
     // Attachment
     'Filename Only': 'attachment',
     'Attachment': 'attachment',

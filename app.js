@@ -13,6 +13,7 @@ const isElectron = window.electronAPI && window.electronAPI.isElectron;
 // Application State
 const state = {
     currentStep: 1,
+    mode: 'sekuriti', // 'sekuriti' (43) | 'am' (44)
     excelFile: null,
     excelData: null,
     parsedData: null,
@@ -38,11 +39,48 @@ async function init() {
     if (isElectron) {
         console.log('Running in Electron mode');
         setupElectronHandlers();
+        checkLicenseExpiry();
     } else {
         console.log('Running in browser mode');
     }
 
     console.log('STAMPS Bulk Generator initialized');
+}
+
+/**
+ * Show a reminder banner when the license is within 7 days of expiry.
+ * Electron-only (web build has no license gate). Fails silently.
+ */
+async function checkLicenseExpiry() {
+    try {
+        if (!window.electronAPI || !window.electronAPI.getLicenseStatus) return;
+        const status = await window.electronAPI.getLicenseStatus();
+        if (!status || !status.activated || typeof status.exp !== 'number') return;
+
+        const msLeft = status.exp - Date.now();
+        const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
+        if (daysLeft > 7 || daysLeft < 0) return; // only warn in the final week
+
+        // Respect a per-expiry dismissal so we don't nag on every launch.
+        const dismissKey = 'stamps_expiry_dismissed_' + status.exp;
+        if (localStorage.getItem(dismissKey) === '1') return;
+
+        const when = daysLeft <= 0 ? 'today'
+            : daysLeft === 1 ? 'tomorrow'
+            : ('in ' + daysLeft + ' days');
+        elements.licenseBannerText.textContent =
+            'Your license expires ' + when + '. Renew now to avoid any interruption.';
+        elements.licenseBanner.style.display = 'flex';
+
+        if (elements.licenseBannerDismiss) {
+            elements.licenseBannerDismiss.addEventListener('click', () => {
+                elements.licenseBanner.style.display = 'none';
+                try { localStorage.setItem(dismissKey, '1'); } catch (e) { /* ignore */ }
+            });
+        }
+    } catch (e) {
+        console.error('License expiry check failed:', e);
+    }
 }
 
 /**
@@ -73,6 +111,9 @@ function cacheElements() {
     // Steps
     elements.steps = document.querySelectorAll('.step');
     elements.stepContents = document.querySelectorAll('.step-content');
+
+    // Application type (mode) selector
+    elements.appTypeSelect = document.getElementById('app-type-select');
 
     // Step 1 - File Selection
     elements.downloadTemplateBtn = document.getElementById('download-template-btn');
@@ -121,12 +162,25 @@ function cacheElements() {
     // File inputs (hidden)
     elements.excelFileInput = document.getElementById('excel-file-input');
     elements.pdfFileInput = document.getElementById('pdf-file-input');
+
+    // License expiry banner
+    elements.licenseBanner = document.getElementById('license-banner');
+    elements.licenseBannerText = document.getElementById('license-banner-text');
+    elements.licenseBannerDismiss = document.getElementById('license-banner-dismiss');
 }
 
 /**
  * Bind event listeners
  */
 function bindEvents() {
+    // Application type (mode) selector
+    if (elements.appTypeSelect) {
+        elements.appTypeSelect.addEventListener('change', (e) => {
+            state.mode = e.target.value === 'am' ? 'am' : 'sekuriti';
+            console.log('Application type set to:', state.mode);
+        });
+    }
+
     // Step 1 - File inputs
     if (elements.downloadTemplateBtn) {
         elements.downloadTemplateBtn.addEventListener('click', handleTemplateDownload);
@@ -162,6 +216,20 @@ function bindEvents() {
     elements.startGeneration.addEventListener('click', startGeneration);
     if (elements.startNew) {
         elements.startNew.addEventListener('click', resetApp);
+    }
+
+    // Inline error fixing (delegated — the errors list is re-rendered on each validation)
+    if (elements.errorsList) {
+        elements.errorsList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.error-fix-btn');
+            if (btn) applyInlineFix(btn.closest('.error-item'));
+        });
+        elements.errorsList.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.classList.contains('error-fix-input')) {
+                e.preventDefault();
+                applyInlineFix(e.target.closest('.error-item'));
+            }
+        });
     }
 }
 
@@ -220,7 +288,7 @@ function handleTemplateDownload() {
         if (!window.TemplateGenerator) {
             throw new Error('TemplateGenerator library not loaded. Please refresh the page.');
         }
-        const buffer = window.TemplateGenerator.generateTemplate();
+        const buffer = window.TemplateGenerator.generateTemplate(state.mode);
         
         // buffer is a Uint8Array in browser SheetJS (since type is 'array')
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -493,7 +561,8 @@ async function runValidation() {
         // Pass attachmentFiles Map to validator
         state.validationResults = await validateAll(
             state.mappedData,
-            state.attachmentFiles
+            state.attachmentFiles,
+            state.mode
         );
 
         const results = state.validationResults;
@@ -532,15 +601,32 @@ async function runValidation() {
         // Show results
         elements.validationResults.style.display = 'block';
 
-        // Render errors
+        // Render errors — fixable ones get an inline input so users can correct
+        // them here instead of round-tripping back to Excel.
+        const FIXABLE = new Set(['MISSING_FIELD', 'INVALID_DATE', 'INVALID_NUMBER']);
         const allIssues = [...results.errors, ...results.warnings];
-        elements.errorsList.innerHTML = allIssues.slice(0, 50).map(issue => `
-            <div class="error-item ${issue.errorType === 'MISSING_FIELD' || issue.errorType === 'INVALID_DATE' || issue.errorType === 'MISSING_FILE' ? 'error' : 'warning'}">
-                <span class="error-row">Row ${issue.rowNumber}</span>
-                <span class="error-field">${issue.fieldName}</span>
-                <span class="error-message">${issue.message}</span>
-            </div>
-        `).join('');
+        elements.errorsList.innerHTML = allIssues.slice(0, 50).map(issue => {
+            const isError = issue.errorType === 'MISSING_FIELD' || issue.errorType === 'INVALID_DATE' || issue.errorType === 'MISSING_FILE';
+            const fixable = FIXABLE.has(issue.errorType) && issue.fieldName && issue.fieldName !== 'attachment';
+            let currentVal = '';
+            if (fixable) {
+                const rec = state.mappedData.find(r => r._rowNumber === issue.rowNumber);
+                const v = rec ? getNestedValueLocal(rec, issue.fieldName) : '';
+                currentVal = (v === undefined || v === null) ? '' : v;
+            }
+            return `
+            <div class="error-item ${isError ? 'error' : 'warning'}" data-row="${issue.rowNumber}" data-field="${escapeHtml(issue.fieldName)}">
+                <div class="error-item-head">
+                    <span class="error-row">Row ${issue.rowNumber}</span>
+                    <span class="error-message">${escapeHtml(issue.message)}</span>
+                </div>
+                ${fixable ? `
+                <div class="error-fix">
+                    <input class="error-fix-input" type="text" value="${escapeHtml(String(currentVal))}" placeholder="Enter correct value" spellcheck="false" />
+                    <button class="error-fix-btn" type="button">Fix</button>
+                </div>` : (issue.errorType === 'MISSING_FILE' ? `<span class="error-hint">Upload this file back in Step 1</span>` : '')}
+            </div>`;
+        }).join('');
 
         if (allIssues.length > 50) {
             elements.errorsList.innerHTML += `<p class="text-muted">...and ${allIssues.length - 50} more issues</p>`;
@@ -589,7 +675,8 @@ async function startGeneration() {
             (progress) => {
                 elements.progressBar.style.width = `${progress.percentage}%`;
                 elements.progressText.textContent = `Processing record ${progress.current} of ${progress.total}...`;
-            }
+            },
+            state.mode
         );
 
         state.generatedFiles = batches;
@@ -677,6 +764,44 @@ function resetApp() {
     elements.pdfFileInput.value = '';
 
     elements.proceedStep2.disabled = true;
+}
+
+/**
+ * Read a nested value by dot-path (e.g. "transferor.name").
+ */
+function getNestedValueLocal(obj, path) {
+    return String(path).split('.').reduce((cur, k) => (cur == null ? undefined : cur[k]), obj);
+}
+
+/**
+ * Set a nested value by dot-path, creating intermediate objects as needed.
+ */
+function setNestedValue(obj, path, value) {
+    const parts = String(path).split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+        if (cur[parts[i]] == null || typeof cur[parts[i]] !== 'object') cur[parts[i]] = {};
+        cur = cur[parts[i]];
+    }
+    cur[parts[parts.length - 1]] = value;
+}
+
+/**
+ * Apply an inline fix from the validation list: write the typed value back into
+ * the in-memory record, then re-validate so the corrected row drops off.
+ */
+async function applyInlineFix(itemEl) {
+    if (!itemEl) return;
+    const row = parseInt(itemEl.getAttribute('data-row'), 10);
+    const field = itemEl.getAttribute('data-field');
+    const input = itemEl.querySelector('.error-fix-input');
+    if (!field || !input) return;
+
+    const rec = state.mappedData.find(r => r._rowNumber === row);
+    if (!rec) return;
+
+    setNestedValue(rec, field, input.value.trim());
+    await runValidation();
 }
 
 /**

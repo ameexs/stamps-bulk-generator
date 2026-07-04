@@ -1,0 +1,240 @@
+/* ============================================
+   STAMPS Bulk Generator - Onboarding Tutorial
+   Editorial dark theme, matches index.css v2.
+   ============================================ */
+
+/* Overlay */
+.tut-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 8, 12, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 24px;
+    animation: tutFade 0.25s ease;
+}
+
+.tut-overlay.open {
+    display: flex;
+}
+
+@keyframes tutFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Card */
+.tut-card {
+    width: 100%;
+    max-width: 500px;
+    background: #10131a;
+    border: 1px solid rgba(233, 235, 241, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    animation: tutPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes tutPop {
+    from { opacity: 0; transform: scale(0.95) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Top illustration band */
+.tut-visual {
+    position: relative;
+    height: 156px;
+    background:
+        radial-gradient(circle at 28% 32%, rgba(139, 150, 248, 0.16), transparent 62%),
+        radial-gradient(circle at 76% 62%, rgba(216, 179, 106, 0.10), transparent 60%),
+        #0a0c11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(233, 235, 241, 0.08);
+}
+
+.tut-visual svg {
+    width: 76px;
+    height: 76px;
+    color: #e9ebf1;
+    filter: drop-shadow(0 6px 18px rgba(139, 150, 248, 0.35));
+}
+
+.tut-badge {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #d8b36a;
+    background: rgba(216, 179, 106, 0.08);
+    border: 1px solid rgba(216, 179, 106, 0.3);
+    padding: 4px 11px;
+    border-radius: 999px;
+}
+
+.tut-skip {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(233, 235, 241, 0.1);
+    color: #a3abbd;
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tut-skip:hover {
+    background: rgba(0, 0, 0, 0.5);
+    color: #e9ebf1;
+}
+
+/* Body */
+.tut-body {
+    padding: 26px 30px 8px;
+    text-align: center;
+    min-height: 138px;
+}
+
+.tut-step-label {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: #8b96f8;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.tut-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #e9ebf1;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.tut-text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #a3abbd;
+}
+
+.tut-text strong {
+    color: #e9ebf1;
+    font-weight: 600;
+}
+
+/* Dots */
+.tut-dots {
+    display: flex;
+    gap: 7px;
+    justify-content: center;
+    padding: 18px 0 4px;
+}
+
+.tut-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(233, 235, 241, 0.16);
+    transition: all 0.25s ease;
+}
+
+.tut-dot.active {
+    width: 20px;
+    background: #8b96f8;
+}
+
+/* Footer nav */
+.tut-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 24px 24px;
+}
+
+.tut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tut-btn svg { width: 15px; height: 15px; }
+
+.tut-btn-ghost {
+    background: transparent;
+    color: #a3abbd;
+    border: 1px solid rgba(233, 235, 241, 0.16);
+    font-weight: 500;
+}
+
+.tut-btn-ghost:hover {
+    color: #e9ebf1;
+    border-color: rgba(233, 235, 241, 0.35);
+}
+
+.tut-btn-ghost:disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tut-btn-primary {
+    background: #e9ebf1;
+    color: #0a0c11;
+}
+
+.tut-btn-primary:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(233, 235, 241, 0.14);
+}
+
+/* ============================================
+   One-time spotlight pulse on key controls
+   ============================================ */
+.tut-pulse {
+    position: relative;
+    animation: tutPulse 1.4s ease-out 3;
+    border-radius: 8px;
+}
+
+@keyframes tutPulse {
+    0% { box-shadow: 0 0 0 0 rgba(139, 150, 248, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(139, 150, 248, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(139, 150, 248, 0); }
+}
+
+/* Small screens */
+@media (max-width: 560px) {
+    .tut-visual { height: 126px; }
+    .tut-visual svg { width: 60px; height: 60px; }
+    .tut-body { padding: 22px 20px 6px; }
+    .tut-title { font-size: 19px; }
+}

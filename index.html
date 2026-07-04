@@ -5,14 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' http://localhost:*">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' http://localhost:*">
     <title>STAMPS Bulk Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts are bundled locally (vendor/fonts) — the app must work fully offline -->
+    <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="index.css">
-    <!-- XLSX library for Excel parsing (bundled locally; works offline + no CDN dependency) -->
+    <link rel="stylesheet" href="tutorial.css">
+    <!-- XLSX (community full build) for parsing uploaded files (offline, no CDN) -->
     <script src="vendor/xlsx.full.min.js"></script>
+    <script>window.__XLSX_PARSE__ = window.XLSX;</script>
+    <!-- xlsx-js-style: same SheetJS API + cell styling, used to build the coloured template -->
+    <script src="vendor/xlsx-js-style.min.js"></script>
+    <script>
+        // xlsx-js-style overwrote window.XLSX. Keep it as XLSXStyle for the template
+        // generator, and restore the community build as window.XLSX for the parser.
+        window.XLSXStyle = window.XLSX;
+        window.XLSX = window.__XLSX_PARSE__;
+    </script>
     <!-- Template Generator for client-side download -->
     <script src="template-generator.js"></script>
 </head>
@@ -33,11 +42,29 @@
                     </svg>
                 </div>
                 <div class="header-title">
-                    <h1>STAMPS Bulk Generator</h1>
-                    <span class="version-badge">v1.0.0</span>
+                    <div class="header-title-row">
+                        <h1>STAMPS Bulk Generator</h1>
+                        <span class="version-badge">v1.1.0</span>
+                    </div>
+                    <span class="header-subtitle">LHDN e-Duti Setem · MyTax XML Generator</span>
                 </div>
             </div>
             <div class="header-actions">
+                <button class="btn btn-outline btn-help" id="tutorial-btn" title="Show the getting-started tutorial">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    Help
+                </button>
+                <div class="mode-select-wrap">
+                    <label for="app-type-select" class="mode-select-label">Application Type</label>
+                    <select id="app-type-select" class="mode-select">
+                        <option value="sekuriti">Sekuriti (43)</option>
+                        <option value="am">Penyeteman Am (44)</option>
+                    </select>
+                </div>
                 <button class="btn btn-outline" id="download-template-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -48,6 +75,17 @@
                 </button>
             </div>
         </header>
+
+        <!-- License expiry reminder (shown only when expiring soon) -->
+        <div id="license-banner" class="license-banner" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span id="license-banner-text"></span>
+            <a id="license-banner-renew" href="https://wa.me/601123240319?text=Hi%20Ameer%2C%20I%27d%20like%20to%20renew%20my%20STAMPS%20Bulk%20Generator%20license." target="_blank" rel="noopener" class="license-banner-renew">Renew</a>
+            <button id="license-banner-dismiss" class="license-banner-close" aria-label="Dismiss">&times;</button>
+        </div>
 
         <!-- Main Content -->
         <main class="app-main">
@@ -78,6 +116,14 @@
             <div class="step-contents">
                 <!-- Step 1: Select Files -->
                 <div class="step-content active" data-step="1">
+                    <div class="step-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>New here? Pick your <strong>Application Type</strong> (top-right), click <strong>Download Template</strong>, fill it in, then upload it below. Need the full walkthrough? Press <strong>Help</strong>.</span>
+                    </div>
                     <div class="file-upload-section">
                         <!-- Excel Upload Card -->
                         <div class="file-card large" id="excel-card">
@@ -138,6 +184,14 @@
 
                 <!-- Step 2: Preview Data -->
                 <div class="step-content" data-step="2">
+                    <div class="step-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>Quick check: confirm your record count and that the data looks right before validating.</span>
+                    </div>
                     <div class="data-summary">
                         <div class="summary-card">
                             <span class="summary-value" id="total-records">0</span>
@@ -182,6 +236,14 @@
 
                 <!-- Step 3: Validate -->
                 <div class="step-content" data-step="3">
+                    <div class="step-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>Validation catches missing or invalid fields <strong>row-by-row</strong> — fix them here so MyTax doesn't reject your file.</span>
+                    </div>
                     <div class="validation-area">
                         <div class="validation-status" id="validation-status">
                             <div class="validation-icon pending">
@@ -226,6 +288,14 @@
 
                 <!-- Step 4: Generate -->
                 <div class="step-content" data-step="4">
+                    <div class="step-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        <span>Files over <strong>30 MB auto-split</strong> into batches. Upload the generated XML straight into MyTax.</span>
+                    </div>
                     <div class="generation-area">
                         <div class="generation-status" id="generation-status">
                             <div class="generation-icon">
@@ -280,6 +350,16 @@
                 </div>
             </div>
         </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <span class="app-footer-left">STAMPS Bulk Generator · 100% offline — your data never leaves this computer</span>
+            <span class="app-footer-right">
+                <button class="app-footer-link" id="tutorial-btn-footer" type="button">Replay tutorial</button>
+                <span class="app-footer-sep">·</span>
+                Support: ameershafiq010@gmail.com
+            </span>
+        </footer>
     </div>
 
     <!-- Hidden File Inputs -->
@@ -287,6 +367,8 @@
     <input type="file" id="pdf-file-input" accept=".pdf,.jpg,.jpeg,.png" multiple style="display: none;">
 
     <script src="app.js" type="module"></script>
+    <!-- First-run onboarding tutorial (standalone; does not touch the generation pipeline) -->
+    <script src="tutorial.js"></script>
 </body>
 
 </html>
