@@ -1,6 +1,6 @@
 {
   "name": "stamps-bulk-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "STAMPS Sekuriti Bulk XML Generator - Desktop Application",
   "main": "src-main/main.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "server": "node server.js",
     "build": "electron-builder",
     "dist": "electron-builder --win",
-    "dist:portable": "electron-builder --win portable"
+    "dist:portable": "electron-builder --win portable",
+    "licenses": "node tools/license-manager.js"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -28,14 +29,15 @@
   "devDependencies": {
     "electron": "^39.2.7",
     "electron-builder": "^24.9.1",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "netlify-cli": "^26.1.0"
   },
   "build": {
     "appId": "com.stamps.bulkgenerator",
     "productName": "STAMPS Bulk Generator",
     "copyright": "Copyright © 2024 Ameer Shafiq",
     "directories": {
-      "output": "dist"
+      "output": "dist_setup"
     },
     "files": [
       "src-main/**/*",
@@ -61,7 +63,7 @@
           ]
         }
       ],
-      "icon": "assets/icon.png",
+      "icon": "assets/icon.ico",
       "publisherName": "Ameer Shafiq"
     },
     "nsis": {
@@ -71,9 +73,9 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "STAMPS Bulk Generator",
-      "installerIcon": "assets/icon.png",
-      "uninstallerIcon": "assets/icon.png",
-      "installerHeaderIcon": "assets/icon.png"
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico"
     },
     "publish": {
       "provider": "github",

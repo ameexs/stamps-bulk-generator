@@ -17,6 +17,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // App info
     getVersion: () => ipcRenderer.invoke('app:getVersion'),
 
+    // Licensing
+    getLicenseStatus: () => ipcRenderer.invoke('license:status'),
+    activateLicense: (key) => ipcRenderer.invoke('license:activate', key),
+
     // Shell operations
     showItemInFolder: (path) => ipcRenderer.invoke('shell:showItemInFolder', path),
     openExternal: (url) => ipcRenderer.invoke('shell:openExternal', url),

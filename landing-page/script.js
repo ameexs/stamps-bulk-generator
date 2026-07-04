@@ -41,6 +41,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Scrollspy — highlight the nav link for the section currently in view
+    const navAnchors = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+    const spySections = navAnchors
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+
+    if (spySections.length) {
+        const spyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = '#' + entry.target.id;
+                    navAnchors.forEach(a => {
+                        a.classList.toggle('active', a.getAttribute('href') === id && !a.classList.contains('btn'));
+                    });
+                }
+            });
+        }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+        spySections.forEach(sec => spyObserver.observe(sec));
+    }
+
     // Animate Elements on Scroll
     const observerOptions = {
         root: null,
@@ -63,50 +84,46 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // Contact Form Handler
+    // Contact Form Handler — submits to Web3Forms, which emails each enquiry.
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const formData = new FormData(contactForm);
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                company: formData.get('company'),
-                message: formData.get('message')
-            };
-
-            // For now, show success message (you can integrate with a backend later)
             const submitBtn = contactForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
-
             submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
 
-            // Simulate sending (replace with actual API call)
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            try {
+                const response = await fetch('https://formsubmit.co/ajax/ameershafiq010@gmail.com', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: new FormData(contactForm)
+                });
+                const result = await response.json();
 
-            // Create mailto link as fallback
-            const subject = encodeURIComponent(`STAMPS Generator Inquiry from ${data.name}`);
-            const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company}\n\nMessage:\n${data.message}`);
-
-            // Show success message
-            submitBtn.textContent = 'Message Sent!';
-            submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
-
-            // Open email client as backup
-            setTimeout(() => {
-                window.location.href = `mailto:ameershafiq010@gmail.com?subject=${subject}&body=${body}`;
-            }, 500);
-
-            // Reset form after delay
-            setTimeout(() => {
-                contactForm.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                submitBtn.style.background = '';
-            }, 3000);
+                // FormSubmit returns success as the string "true"
+                if (result.success === true || result.success === 'true') {
+                    // Real delivery confirmed by Web3Forms
+                    submitBtn.textContent = 'Message Sent!';
+                    submitBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+                    contactForm.reset();
+                } else {
+                    throw new Error(result.message || 'Submission rejected');
+                }
+            } catch (err) {
+                // Honest failure state — do NOT claim it was sent
+                console.error('Contact form error:', err);
+                submitBtn.textContent = 'Failed — please WhatsApp us';
+                submitBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+            } finally {
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '';
+                }, 4000);
+            }
         });
     }
 

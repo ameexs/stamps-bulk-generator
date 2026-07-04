@@ -14,6 +14,7 @@ console.log('Electron module:', electronModule);
 const { app, BrowserWindow, ipcMain, dialog, shell } = electronModule;
 
 const path = require('path');
+const license = require('./license');
 
 // Keep a global reference of the window object
 let mainWindow = null;
@@ -41,8 +42,8 @@ function createWindow() {
         backgroundColor: '#0a0a0a'
     });
 
-    // Load the app directly from local file (serverless mode)
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    // Gate behind license: show the activation screen until a valid key is stored.
+    loadEntryPage();
 
     // Show window when ready
     mainWindow.once('ready-to-show', () => {
@@ -66,6 +67,14 @@ function createWindow() {
         shell.openExternal(url);
         return { action: 'deny' };
     });
+}
+
+// Decide which page to show based on license state.
+function loadEntryPage() {
+    const state = license.getState(app);
+    const page = state.activated ? '../renderer/index.html' : '../renderer/activation.html';
+    console.log('License activated:', state.activated, '-> loading', page);
+    mainWindow.loadFile(path.join(__dirname, page));
 }
 
 function startServer() {
@@ -130,6 +139,24 @@ app.on('before-quit', () => {
 });
 
 // ============ IPC Handlers ============
+
+// License: current activation state
+ipcMain.handle('license:status', () => license.getState(app));
+
+// License: verify + activate a key (incl. clock-rollback check), then enter the app
+ipcMain.handle('license:activate', (event, key) => {
+    let result;
+    try {
+        result = license.activate(app, key);
+    } catch (e) {
+        console.error('Activation error:', e);
+        return { valid: false, reason: 'Could not save license. Check folder permissions.' };
+    }
+    if (result.valid) {
+        loadEntryPage();
+    }
+    return result;
+});
 
 // Open file dialog for Excel files
 ipcMain.handle('dialog:openExcel', async () => {

@@ -1,6 +1,12 @@
 # Dependencies
 node_modules/
 
+# Build output (installers, unpacked apps) — hundreds of MB, never commit
+dist/
+dist_installer/
+dist_setup/
+build_out/
+
 # Data
 data/
 uploads/
@@ -16,6 +22,7 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+.claude/
 
 # Logs
 *.log
@@ -23,3 +30,10 @@ npm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# License signing keys — NEVER commit the private key
+tools/keys/
+*.pem
+
+# Customer license database (names + issued keys) — keep private, back it up
+tools/data/

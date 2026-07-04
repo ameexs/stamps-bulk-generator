@@ -3,43 +3,42 @@
  * Validates parsed data before XML generation
  */
 
-// Mandatory fields that must have values
-const MANDATORY_FIELDS = [
-    // Instrument Information
+// Party fields mandatory in both modes (identical transferor/transferee rules)
+const PARTY_MANDATORY = (who) => [
+    `${who}.type`,
+    `${who}.name`,
+    `${who}.street1`,
+    `${who}.street2`,
+    `${who}.postcode`,
+    `${who}.city`,
+    `${who}.state`,
+    `${who}.country`,
+    `${who}.telNo`
+];
+
+// Mandatory fields for Penyeteman Sekuriti (applicationType 43)
+const MANDATORY_FIELDS_SEKURITI = [
     'refNo',
     'instrumentDate',
     'principal',
     'typeOfInstrumentOthers',
-
-    // Transferor (Provider) - Basic Info
-    'transferor.type',
-    'transferor.name',
-
-    // Transferor - Address & Contact
-    'transferor.street1',
-    'transferor.street2',
-    'transferor.postcode',
-    'transferor.city',
-    'transferor.state',
-    'transferor.country',
-    'transferor.telNo',
-
-    // Transferee (Recipient) - Basic Info
-    'transferee.type',
-    'transferee.name',
-
-    // Transferee - Address & Contact
-    'transferee.street1',
-    'transferee.street2',
-    'transferee.postcode',
-    'transferee.city',
-    'transferee.state',
-    'transferee.country',
-    'transferee.telNo',
-
+    ...PARTY_MANDATORY('transferor'),
+    ...PARTY_MANDATORY('transferee'),
     // Instrument details (Wajib! per LHDN spec)
     'consideration',
     'duration'
+];
+
+// Mandatory fields for Penyeteman Am (applicationType 44)
+// Am has no principal/consideration/duration. Per LHDN spec 2.2.2, the Am-only
+// fields (remessionOrExemption/payment/aggrementInfo) are NOT marked Wajib, so
+// they stay optional.
+const MANDATORY_FIELDS_AM = [
+    'refNo',
+    'instrumentDate',
+    'typeOfInstrumentOthers',
+    ...PARTY_MANDATORY('transferor'),
+    ...PARTY_MANDATORY('transferee')
 ];
 
 // Date format regex
@@ -49,9 +48,11 @@ const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
  * Validate all records
  * @param {Array} mappedData - Array of mapped record objects
  * @param {Map} attachmentFiles - Map of filename -> attachment data
+ * @param {string} mode - 'sekuriti' (43) | 'am' (44). Defaults to 'sekuriti'.
  * @returns {Object} Validation results
  */
-export async function validateAll(mappedData, attachmentFiles) {
+export async function validateAll(mappedData, attachmentFiles, mode = 'sekuriti') {
+    const MANDATORY_FIELDS = mode === 'am' ? MANDATORY_FIELDS_AM : MANDATORY_FIELDS_SEKURITI;
     const errors = [];
     const warnings = [];
     let validCount = 0;
@@ -171,7 +172,7 @@ export async function validateAll(mappedData, attachmentFiles) {
                     if (!record.transferor.pasportCountry) {
                         rowErrors.push({
                             rowNumber,
-                            fieldName: 'transferor.passportCountry',
+                            fieldName: 'transferor.pasportCountry',
                             errorType: 'MISSING_FIELD',
                             message: 'Non-citizen transferor requires Passport Country Code'
                         });
@@ -228,7 +229,7 @@ export async function validateAll(mappedData, attachmentFiles) {
                     if (!record.transferee.pasportCountry) {
                         rowErrors.push({
                             rowNumber,
-                            fieldName: 'transferee.passportCountry',
+                            fieldName: 'transferee.pasportCountry',
                             errorType: 'MISSING_FIELD',
                             message: 'Non-citizen transferee requires Passport Country Code'
                         });
@@ -298,8 +299,8 @@ function getFieldDisplayName(fieldPath) {
         'transferor.rocNo': 'Transferor ROC',
         'transferor.busType': 'Transferor Business Type',
         'transferor.nationality': 'Transferor Nationality',
-        'transferor.passportNo': 'Transferor Passport',
-        'transferor.passportCountry': 'Transferor Passport Country',
+        'transferor.pasportNo': 'Transferor Passport',
+        'transferor.pasportCountry': 'Transferor Passport Country',
         'transferor.street1': 'Transferor Address Line 1',
         'transferor.street2': 'Transferor Address Line 2',
         'transferor.postcode': 'Transferor Postcode',
@@ -315,8 +316,8 @@ function getFieldDisplayName(fieldPath) {
         'transferee.rocNo': 'Transferee ROC',
         'transferee.busType': 'Transferee Business Type',
         'transferee.nationality': 'Transferee Nationality',
-        'transferee.passportNo': 'Transferee Passport',
-        'transferee.passportCountry': 'Transferee Passport Country',
+        'transferee.pasportNo': 'Transferee Passport',
+        'transferee.pasportCountry': 'Transferee Passport Country',
         'transferee.street1': 'Transferee Address Line 1',
         'transferee.street2': 'Transferee Address Line 2',
         'transferee.postcode': 'Transferee Postcode',
@@ -335,4 +336,4 @@ function getFieldDisplayName(fieldPath) {
     return displayNames[fieldPath] || fieldPath;
 }
 
-export { MANDATORY_FIELDS };
+export { MANDATORY_FIELDS_SEKURITI, MANDATORY_FIELDS_AM };

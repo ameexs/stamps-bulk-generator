@@ -4,38 +4,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STAMPS Bulk Generator | Automate Your Stamp Duty Submissions</title>
+    <title>STAMPS Bulk Generator | LHDN Stamp Duty XML Generator (e-Duti Setem / MyTax)</title>
     <meta name="description"
-        content="Transform your Excel data into STAMPS-compliant XML files in seconds. Save hours on stamp duty submissions with Malaysia's most powerful bulk generation tool.">
-    <meta name="keywords" content="STAMPS, LHDN, stamp duty, bulk generator, XML, Malaysia, duti setem">
+        content="LHDN bulk stamp duty XML generator — convert Excel to STAMPS-compliant XML in seconds for Penyeteman Sekuriti (43) & Penyeteman Am (44). Current with e-Duti Setem (MyTax). Auto-split at 30MB, smart validation, 100% offline.">
+    <meta name="keywords" content="stamp bulk generator, xml lhdn generator, LHDN stamp duty XML, bulk e-stamping Malaysia, STAMPS bulk generator, e-Duti Setem, MyTax stamp duty, penyeteman sekuriti, penyeteman am, duti setem XML, bulk stamping software Malaysia">
+    <meta name="author" content="Ameer Shafiq">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://stamps-bulk-generator.netlify.app/">
+
+    <!-- Open Graph (Facebook / WhatsApp / LinkedIn previews) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="STAMPS Bulk Generator | LHDN Stamp Duty XML Generator">
+    <meta property="og:description"
+        content="Convert Excel to STAMPS-compliant XML in seconds — Penyeteman Sekuriti (43) & Am (44), current with e-Duti Setem (MyTax). Annual license RM490/year.">
+    <meta property="og:url" content="https://stamps-bulk-generator.netlify.app/">
+    <meta property="og:site_name" content="STAMPS Bulk Generator">
+    <meta property="og:locale" content="en_MY">
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="STAMPS Bulk Generator | LHDN Stamp Duty XML Generator">
+    <meta name="twitter:description"
+        content="Convert Excel to STAMPS-compliant XML in seconds. Sekuriti (43) & Am (44), e-Duti Setem (MyTax) ready. Annual license RM490/year.">
+
+    <!-- Structured data: helps Google understand & show rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "STAMPS Bulk Generator",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows",
+      "description": "LHDN bulk stamp duty XML generator that converts Excel spreadsheets into STAMPS-compliant XML for Penyeteman Sekuriti (43) and Penyeteman Am (44). Current with e-Duti Setem (MyTax).",
+      "url": "https://stamps-bulk-generator.netlify.app/",
+      "author": { "@type": "Person", "name": "Ameer Shafiq" },
+      "offers": {
+        "@type": "Offer",
+        "price": "490",
+        "priceCurrency": "MYR",
+        "availability": "https://schema.org/InStock"
+      },
+      "featureList": [
+        "Bulk Excel to STAMPS XML conversion",
+        "Penyeteman Sekuriti (43) and Penyeteman Am (44)",
+        "Auto-split files under the 30MB STAMPS limit",
+        "Smart validation with row-numbered errors",
+        "PDF/image attachment embedding",
+        "100% offline desktop application"
+      ]
+    }
+    </script>
+
+    <!-- FAQ structured data (matches the visible FAQ below) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the STAMPS Bulk Generator?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It is a Windows desktop application that converts Excel spreadsheets into LHDN STAMPS-compliant bulk stamping XML for e-Duti Setem (MyTax). It lets law firms, banks and corporate secretaries stamp many instruments in one upload instead of keying each one in by hand." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work with LHDN e-Duti Setem (MyTax)?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The STAMPS portal moved to e-Duti Setem on MyTax in 2026, and the generator produces the bulk stamping XML format used for that system." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it generate XML for both Penyeteman Sekuriti and Penyeteman Am?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. A single dropdown switches between Penyeteman Sekuriti (applicationType 43) and Penyeteman Am (applicationType 44); the template, validation and generated XML all adapt automatically." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does it handle the 30MB STAMPS upload limit?",
+          "acceptedAnswer": { "@type": "Answer", "text": "When your output would exceed 30MB, it automatically splits the data into multiple numbered files, each safely under the limit and ready to upload one by one - no manual splitting." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does my data stay private and work offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. It runs 100% offline on your computer. Your spreadsheets and attachments never leave your machine or get uploaded to any server." }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does the STAMPS Bulk Generator cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It is an annual license of RM 490 per year, including both Sekuriti and Am modes, the Excel template, and all updates and support while your license is active." }
+        }
+      ]
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=4">
 </head>
 
 <body>
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <div class="nav-brand">
-                <div class="logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <a href="#" class="nav-brand">
+                <span class="brand-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                         <polyline points="14 2 14 8 20 8" />
                         <line x1="16" y1="13" x2="8" y2="13" />
                         <line x1="16" y1="17" x2="8" y2="17" />
                     </svg>
-                </div>
-                <span class="brand-text">STAMPS Generator</span>
-            </div>
+                </span>
+                <span class="brand-text"><strong>STAMPS</strong> Bulk Generator</span>
+            </a>
             <div class="nav-links">
                 <a href="#features">Features</a>
-                <a href="#how-it-works">How It Works</a>
+                <a href="#how-it-works">Workflow</a>
                 <a href="#pricing">Pricing</a>
-                <a href="#contact" class="btn btn-nav">Get Started</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact" class="btn btn-nav">Get the app</a>
             </div>
             <button class="nav-toggle" aria-label="Toggle navigation">
                 <span></span>
@@ -45,517 +132,322 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <header class="hero">
-        <div class="hero-bg">
-            <div class="hero-gradient"></div>
-            <div class="hero-grid"></div>
-        </div>
-        <div class="container hero-content">
+        <div class="container hero-grid">
             <div class="hero-text">
-                <div class="badge">
-                    <span class="badge-icon">🇲🇾</span>
-                    Built for Malaysian Businesses
-                </div>
-                <h1>Bulk Stamp Duty Submissions <span class="gradient-text">Made Effortless</span></h1>
-                <p class="hero-subtitle">Transform your Excel spreadsheets into STAMPS-compliant XML files in seconds.
-                    Stop wasting hours on manual data entry.</p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-value">100+</span>
-                        <span class="stat-label">Records in Minutes</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-value">&lt;1%</span>
-                        <span class="stat-label">Error Rate</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-value">90%</span>
-                        <span class="stat-label">Time Saved</span>
-                    </div>
-                </div>
+                <p class="eyebrow">For Malaysian law firms, banks &amp; company secretaries</p>
+                <h1>One spreadsheet in.<br><em>Compliant XML</em> out.</h1>
+                <p class="hero-sub">STAMPS Bulk Generator is a Windows desktop tool that turns your Excel records
+                    into LHDN bulk-stamping XML for <strong>e‑Duti Setem (MyTax)</strong> — validated row by row,
+                    attachments embedded, split under the 30&nbsp;MB limit. No portal keying. No manual encoding.</p>
                 <div class="hero-actions">
-                    <a href="https://github.com/ameexs/stamps-bulk-generator/releases/latest" target="_blank"
-                        class="btn btn-primary btn-lg">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                        Download v1.0.0
-                    </a>
-                    <a href="#how-it-works" class="btn btn-outline btn-lg">
-                        See How It Works
-                    </a>
+                    <a href="#pricing" class="btn btn-primary btn-lg">Get the app</a>
+                    <a href="#how-it-works" class="btn btn-outline btn-lg">See the workflow</a>
                 </div>
+                <ul class="hero-facts">
+                    <li><span class="fact-num">43</span><span class="fact-label">Penyeteman Sekuriti</span></li>
+                    <li><span class="fact-num">44</span><span class="fact-label">Penyeteman Am</span></li>
+                    <li><span class="fact-num">30&nbsp;MB</span><span class="fact-label">auto-split batches</span></li>
+                    <li><span class="fact-num">0</span><span class="fact-label">data leaves your PC</span></li>
+                </ul>
             </div>
             <div class="hero-visual">
-                <div class="app-preview">
-                    <div class="app-window">
-                        <div class="window-header">
-                            <div class="window-controls">
-                                <span class="control close"></span>
-                                <span class="control minimize"></span>
-                                <span class="control maximize"></span>
-                            </div>
-                            <span class="window-title">STAMPS Bulk Generator</span>
-                        </div>
-                        <div class="window-content">
-                            <div class="preview-steps">
-                                <div class="preview-step active">
-                                    <div class="step-num">1</div>
-                                    <span>Upload Excel</span>
-                                </div>
-                                <div class="preview-step">
-                                    <div class="step-num">2</div>
-                                    <span>Validate</span>
-                                </div>
-                                <div class="preview-step">
-                                    <div class="step-num">3</div>
-                                    <span>Generate</span>
-                                </div>
-                            </div>
-                            <div class="preview-animation">
-                                <div class="excel-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                        <polyline points="14 2 14 8 20 8" />
-                                    </svg>
-                                </div>
-                                <div class="arrow">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="5" y1="12" x2="19" y2="12" />
-                                        <polyline points="12 5 19 12 12 19" />
-                                    </svg>
-                                </div>
-                                <div class="xml-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="16 18 22 12 16 6" />
-                                        <polyline points="8 6 2 12 8 18" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                <div class="doc-card">
+                    <div class="doc-card-head">
+                        <span class="doc-card-title">instruments.xlsx</span>
+                        <span class="doc-card-chip">216 rows</span>
                     </div>
+                    <table class="doc-table">
+                        <thead>
+                            <tr><th>REF</th><th>PARTY</th><th>RM</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>KL-0148</td><td>TAN MEI LING</td><td>450,000.00</td><td class="ok">✓</td></tr>
+                            <tr><td>KL-0149</td><td>AMIRUL HOLDINGS SDN BHD</td><td>1,200,000.00</td><td class="ok">✓</td></tr>
+                            <tr><td>KL-0150</td><td>RAJESH A/L KUMAR</td><td>85,000.00</td><td class="ok">✓</td></tr>
+                            <tr><td>KL-0151</td><td>LIM &amp; PARTNERS</td><td>300,000.00</td><td class="ok">✓</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="xml-card">
+                    <div class="xml-card-head">
+                        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                        <span class="xml-card-title">Output.xml</span>
+                    </div>
+<pre class="xml-code"><code><span class="tag">&lt;bulkstamping&gt;</span>
+  <span class="tag">&lt;applicationType&gt;</span><span class="val">43</span><span class="tag">&lt;/applicationType&gt;</span>
+  <span class="tag">&lt;instrument&gt;</span>
+    <span class="tag">&lt;refNo&gt;</span><span class="val">KL-0148</span><span class="tag">&lt;/refNo&gt;</span>
+    <span class="tag">&lt;instrumentDate&gt;</span><span class="val">12/02/2026</span><span class="tag">&lt;/instrumentDate&gt;</span>
+    <span class="tag">&lt;attachment&gt;</span><span class="val">facility-agreement.pdf</span><span class="tag">&lt;/attachment&gt;</span>
+  <span class="tag">&lt;/instrument&gt;</span>
+  <span class="comment">&lt;!-- 215 more instruments --&gt;</span>
+<span class="tag">&lt;/bulkstamping&gt;</span></code></pre>
+                    <div class="xml-card-foot">✓ 216 instruments validated · ready for MyTax</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Trusted By Section -->
-    <section class="trusted-by">
+    <!-- Trust strip -->
+    <section class="trust-strip">
         <div class="container">
-            <p class="trusted-label">Ideal for</p>
-            <div class="trusted-list">
-                <span>Legal Firms</span>
-                <span class="divider">•</span>
-                <span>Banks & Financial Institutions</span>
-                <span class="divider">•</span>
-                <span>Corporate Secretarial</span>
-                <span class="divider">•</span>
-                <span>Property Developers</span>
-            </div>
+            <p>Runs entirely on your machine. No cloud, no uploads, no per-document fees — one annual license.</p>
         </div>
     </section>
 
-    <!-- Problem Section -->
+    <!-- Problem -->
     <section class="problem-section">
         <div class="container">
-            <div class="problem-content">
-                <h2>Still Doing <span class="text-danger">Manual Data Entry?</span></h2>
-                <p class="section-subtitle">The old way of submitting stamp duty is costing you time and money.</p>
-                <div class="problem-grid">
-                    <div class="problem-card">
-                        <div class="problem-icon">⏰</div>
-                        <h3>5-10 Minutes Per Record</h3>
-                        <p>Manual entry into STAMPS portal for each instrument takes valuable staff time</p>
-                    </div>
-                    <div class="problem-card">
-                        <div class="problem-icon">❌</div>
-                        <h3>5-10% Error Rate</h3>
-                        <p>Human errors lead to rejected submissions and costly delays</p>
-                    </div>
-                    <div class="problem-card">
-                        <div class="problem-icon">📎</div>
-                        <h3>Complex Attachments</h3>
-                        <p>Base64 encoding of PDFs is technical and error-prone</p>
-                    </div>
-                    <div class="problem-card">
-                        <div class="problem-icon">📚</div>
-                        <h3>Learning Curve</h3>
-                        <p>Understanding XML structure and STAMPS specifications takes time</p>
-                    </div>
+            <div class="section-head">
+                <span class="section-index">01 — The problem</span>
+                <h2>The portal wasn't built <em>for volume</em>.</h2>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <span class="problem-num">01</span>
+                    <h3>Keyed one at a time</h3>
+                    <p>Each instrument takes 5–10 minutes to enter by hand. A 200-instrument batch is a week
+                        of clerk time — every single month.</p>
+                </div>
+                <div class="problem-card">
+                    <span class="problem-num">02</span>
+                    <h3>One typo, one rejection</h3>
+                    <p>A wrong IC format or a date typed as MM/DD instead of DD/MM bounces the submission —
+                        and under self-assessment, the liability sits with you.</p>
+                </div>
+                <div class="problem-card">
+                    <span class="problem-num">03</span>
+                    <h3>Attachments, encoded by hand</h3>
+                    <p>The bulk spec wants every supporting PDF base64-encoded inside the XML. That is not a
+                        job for a human with a text editor.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features -->
     <section id="features" class="features-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Features</span>
-                <h2>Everything You Need for <span class="gradient-text">Bulk Submissions</span></h2>
-                <p class="section-subtitle">Powerful features designed for high-volume stamp duty processing</p>
+            <div class="section-head">
+                <span class="section-index">02 — What it does</span>
+                <h2>Built to the LHDN spec, <em>field by field</em>.</h2>
+                <p class="section-sub">Not a generic converter — every column, code table and validation rule
+                    follows the bulk stamping specification.</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card featured">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                        </svg>
-                    </div>
-                    <h3>Excel & CSV Import</h3>
-                    <p>Upload your existing spreadsheets. We support .xlsx, .xls, and .csv formats with intelligent
-                        column mapping.</p>
+            <div class="spec-sheet">
+                <div class="feature-card spec-row">
+                    <h3>Both application types</h3>
+                    <p>Switch between Penyeteman Sekuriti and Penyeteman Am with one dropdown — the Excel
+                        template, validation rules and generated XML all adapt automatically.</p>
+                    <code class="spec-tag">applicationType 43 · 44</code>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
-                    </div>
-                    <h3>Smart Validation</h3>
-                    <p>Catch errors before submission. Validates IC formats, dates, Lampiran codes, and more.</p>
+                <div class="feature-card spec-row">
+                    <h3>Row-level validation</h3>
+                    <p>IC versus passport rules, company ROC checks, DD/MM/YYYY dates, mandatory party fields —
+                        every error named by row and field before you submit, not after LHDN rejects it.</p>
+                    <code class="spec-tag">row 14 · transferor.icNo</code>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path
-                                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                        </svg>
-                    </div>
-                    <h3>Attachment Handling</h3>
-                    <p>Automatically converts PDFs and images to base64. No technical knowledge required.</p>
+                <div class="feature-card spec-row">
+                    <h3>Fix errors in-app</h3>
+                    <p>Correct a flagged field inline and re-validate instantly. No round trips back to Excel
+                        for a single missing postcode.</p>
+                    <code class="spec-tag">validate → fix → pass</code>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7" />
-                            <rect x="14" y="3" width="7" height="7" />
-                            <rect x="14" y="14" width="7" height="7" />
-                            <rect x="3" y="14" width="7" height="7" />
-                        </svg>
-                    </div>
-                    <h3>Smart Batching</h3>
-                    <p>Automatically splits large datasets into 50-record batches per STAMPS requirements.</p>
+                <div class="feature-card spec-row">
+                    <h3>Attachments embedded</h3>
+                    <p>Point each row at its PDF or image. The app converts them to base64 and places them
+                        inside the XML exactly as the spec requires.</p>
+                    <code class="spec-tag">&lt;attachment&gt;…&lt;/attachment&gt;</code>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
-                    </div>
-                    <h3>100% Offline</h3>
-                    <p>Works completely offline. Your sensitive data never leaves your computer.</p>
+                <div class="feature-card spec-row">
+                    <h3>Auto-split at 30&nbsp;MB</h3>
+                    <p>The portal rejects uploads over 30&nbsp;MB. Large batches split into numbered files
+                        automatically, each safely under the limit.</p>
+                    <code class="spec-tag">Output_Batch_2.xml</code>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="16 18 22 12 16 6" />
-                            <polyline points="8 6 2 12 8 18" />
-                        </svg>
-                    </div>
-                    <h3>STAMPS Compliant</h3>
-                    <p>Generates XML files that fully comply with LHDN STAMPS specifications.</p>
+                <div class="feature-card spec-row">
+                    <h3>Offline by design</h3>
+                    <p>Client data never leaves the machine. No cloud processing, no third-party servers,
+                        nothing to explain to your compliance officer.</p>
+                    <code class="spec-tag">0 uploads</code>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
+    <!-- How it works -->
     <section id="how-it-works" class="how-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Simple Process</span>
-                <h2>Get Started in <span class="gradient-text">3 Easy Steps</span></h2>
-                <p class="section-subtitle">From Excel to STAMPS-ready XML in minutes</p>
+            <div class="section-head">
+                <span class="section-index">03 — The workflow</span>
+                <h2>Three steps, <em>then upload</em>.</h2>
             </div>
-            <div class="steps-timeline">
+            <div class="steps-list">
                 <div class="step-item">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Prepare Your Data</h3>
-                        <p>Download our Excel template and fill in your stamp duty data. All column headers are
-                            pre-configured for STAMPS compatibility.</p>
-                        <ul class="step-list">
-                            <li>Pre-built template with all required fields</li>
-                            <li>Code reference sheets included</li>
-                            <li>Works with existing spreadsheets</li>
-                        </ul>
+                    <span class="step-index">1</span>
+                    <div class="step-body">
+                        <h3>Download the template</h3>
+                        <p>A formatted Excel workbook with every required column, plus built-in reference sheets
+                            for state codes, LHDN branch codes and country codes. One row per instrument.</p>
                     </div>
                 </div>
                 <div class="step-item">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>Upload & Validate</h3>
-                        <p>Import your Excel file and let our system validate every record. Fix any issues before
-                            generating.</p>
-                        <ul class="step-list">
-                            <li>Instant error detection</li>
-                            <li>Clear error messages with row numbers</li>
-                            <li>Attachment matching</li>
-                        </ul>
+                    <span class="step-index">2</span>
+                    <div class="step-body">
+                        <h3>Fill, upload &amp; validate</h3>
+                        <p>Import the file and run validation. Errors are listed by row and field — fix them
+                            inline in the app and re-check in one click.</p>
                     </div>
                 </div>
                 <div class="step-item">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3>Generate & Download</h3>
-                        <p>Generate STAMPS-compliant XML files and download them to your computer. Ready to upload to
-                            the STAMPS portal.</p>
-                        <ul class="step-list">
-                            <li>Auto-batching for large datasets</li>
-                            <li>Embedded attachments</li>
-                            <li>Ready for STAMPS portal upload</li>
-                        </ul>
+                    <span class="step-index">3</span>
+                    <div class="step-body">
+                        <h3>Generate &amp; upload to MyTax</h3>
+                        <p>Get compliant XML with attachments embedded, auto-split under 30&nbsp;MB. Upload the
+                            files to e‑Duti Setem and you're done.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Section -->
+    <!-- Pricing -->
     <section id="pricing" class="pricing-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Pricing</span>
-                <h2>Simple, Transparent <span class="gradient-text">Pricing</span></h2>
-                <p class="section-subtitle">One-time purchase. No subscriptions. No hidden fees.</p>
+            <div class="section-head">
+                <span class="section-index">04 — Pricing</span>
+                <h2>One license. <em>No per-document fees.</em></h2>
             </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-badge">Essential</div>
-                    <div class="pricing-price">
-                        <span class="currency">RM</span>
-                        <span class="amount">2,499</span>
-                        <span class="period">one-time</span>
-                    </div>
-                    <p class="pricing-description">Perfect for small legal firms and corporate secretarial offices</p>
-                    <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Single workstation license
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            All core features
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Excel template included
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            6 months free updates
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Email support
-                        </li>
-                    </ul>
-                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%20want%20to%20purchase%20STAMPS%20Bulk%20Generator%20-%20Essential%20Plan%20(RM%202%2C499).%20Please%20share%20the%20bank%20details%20for%20online%20transfer."
-                        target="_blank" class="btn btn-outline btn-block">Order via WhatsApp</a>
-                </div>
+            <div class="pricing-wrap">
                 <div class="pricing-card featured">
-                    <div class="pricing-popular">Most Popular</div>
-                    <div class="pricing-badge">Professional</div>
-                    <div class="pricing-price">
-                        <span class="currency">RM</span>
-                        <span class="amount">4,999</span>
-                        <span class="period">one-time</span>
+                    <div class="pricing-top">
+                        <span class="pricing-label">Annual license</span>
+                        <div class="pricing-price">
+                            <span class="currency">RM</span><span class="amount">490</span><span class="period">/ year</span>
+                        </div>
+                        <p class="pricing-intro">Introductory launch price — locked in for early customers before it rises.</p>
                     </div>
-                    <p class="pricing-description">Ideal for established firms processing high volumes</p>
                     <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Up to 5 workstation licenses
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            All core features
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Priority email & phone support
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            12 months free updates
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Remote installation support
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Custom template help
-                        </li>
+                        <li>Sekuriti (43) &amp; Am (44) in one license</li>
+                        <li>Unlimited instruments and batches</li>
+                        <li>Row-level validation with inline fixes</li>
+                        <li>PDF / image attachment embedding</li>
+                        <li>Auto-split under the 30&nbsp;MB limit</li>
+                        <li>Fully offline — data stays on your PC</li>
+                        <li>12 months of updates &amp; email support</li>
                     </ul>
-                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%20want%20to%20purchase%20STAMPS%20Bulk%20Generator%20-%20Professional%20Plan%20(RM%204%2C999).%20Please%20share%20the%20bank%20details%20for%20online%20transfer."
+                    <a href="https://wa.me/601123240319?text=Hi%20Ameer%2C%20I%20want%20to%20purchase%20STAMPS%20Bulk%20Generator%20(RM%20490%2Fyear).%20Please%20share%20the%20payment%20details."
                         target="_blank" class="btn btn-primary btn-block">Order via WhatsApp</a>
-                </div>
-                <div class="pricing-card">
-                    <div class="pricing-badge">Enterprise</div>
-                    <div class="pricing-price">
-                        <span class="currency">RM</span>
-                        <span class="amount">9,999</span>
-                        <span class="period">one-time</span>
-                    </div>
-                    <p class="pricing-description">For large organizations with custom requirements</p>
-                    <ul class="pricing-features">
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Unlimited workstation licenses
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            All Professional features
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            On-site training (2 sessions)
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            24 months free updates
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Dedicated account manager
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                            Custom feature development
-                        </li>
-                    </ul>
-                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%27m%20interested%20in%20the%20STAMPS%20Bulk%20Generator%20-%20Enterprise%20Plan%20(RM%209%2C999).%20I%20would%20like%20to%20discuss%20requirements%20and%20payment%20options."
-                        target="_blank" class="btn btn-outline btn-block">Contact Sales</a>
+                    <a href="https://wa.me/601123240319?text=Hi%20Ameer%2C%20I%27d%20like%20to%20try%20STAMPS%20Bulk%20Generator%20free%20for%202%20weeks."
+                        target="_blank" class="pricing-trial-link">Or start with a free 2-week trial →</a>
+                    <p class="pricing-note">Licensed software — the installer and your license key are emailed
+                        within 24 hours of payment confirmation.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
         <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Save Hours Every Week?</h2>
-                <p>Join legal firms and corporations across Malaysia who have streamlined their stamp duty process.</p>
-                <div class="cta-actions">
-                    <a href="https://wa.me/60112324319?text=Hi%20Ameer%2C%20I%27m%20interested%20in%20STAMPS%20Bulk%20Generator.%20Can%20you%20tell%20me%20more%3F"
-                        target="_blank" class="btn btn-primary btn-lg">Get Started Today</a>
-                    <a href="mailto:ameershafiq010@gmail.com" class="btn btn-ghost btn-lg">Request a Demo</a>
+            <div class="section-head">
+                <span class="section-index">05 — FAQ</span>
+                <h2>Common <em>questions</em>.</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>What is the STAMPS Bulk Generator?</h3>
+                    <p>A Windows desktop application that converts Excel spreadsheets into LHDN STAMPS-compliant
+                        bulk stamping XML for e-Duti Setem (MyTax). It lets law firms, banks and corporate
+                        secretaries stamp many instruments in one upload instead of keying each one in by hand.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Does it work with LHDN e-Duti Setem (MyTax)?</h3>
+                    <p>Yes. The STAMPS portal moved to e-Duti Setem on MyTax in 2026, and the generator produces
+                        the bulk stamping XML format used for that system.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can it generate XML for both Penyeteman Sekuriti and Penyeteman Am?</h3>
+                    <p>Yes. A single dropdown switches between Penyeteman Sekuriti (applicationType 43) and
+                        Penyeteman Am (applicationType 44); the template, validation and generated XML all adapt
+                        automatically.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How does it handle the 30 MB STAMPS upload limit?</h3>
+                    <p>When your output would exceed 30 MB, it automatically splits the data into multiple
+                        numbered files, each safely under the limit and ready to upload one by one — no manual
+                        splitting.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Does my data stay private and work offline?</h3>
+                    <p>Yes. It runs 100% offline on your computer. Your spreadsheets and attachments never leave
+                        your machine or get uploaded to any server.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How much does the STAMPS Bulk Generator cost?</h3>
+                    <p>An annual license of RM 490 per year — including both Sekuriti and Am modes, the Excel
+                        template, and all updates and support while your license is active.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact -->
     <section id="contact" class="contact-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Contact</span>
-                <h2>Get In <span class="gradient-text">Touch</span></h2>
-                <p class="section-subtitle">Have questions or ready to purchase? We'd love to hear from you.</p>
+            <div class="section-head">
+                <span class="section-index">06 — Contact</span>
+                <h2>Questions? <em>Ask directly.</em></h2>
+                <p class="section-sub">You'll be talking to the developer, not a support queue.</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-info">
                     <div class="contact-card">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                <polyline points="22,6 12,13 2,6" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <a href="mailto:ameershafiq010@gmail.com">ameershafiq010@gmail.com</a>
-                        </div>
+                        <span class="contact-label">Email</span>
+                        <a href="mailto:ameershafiq010@gmail.com">ameershafiq010@gmail.com</a>
                     </div>
                     <div class="contact-card">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path
-                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4>Phone</h4>
-                            <a href="tel:+601123240319">+60 11-2324 0319</a>
-                        </div>
+                        <span class="contact-label">WhatsApp</span>
+                        <a href="https://wa.me/601123240319" target="_blank">+60 11-2324 0319</a>
                     </div>
                     <div class="contact-card">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Malaysia</p>
-                        </div>
+                        <span class="contact-label">Based in</span>
+                        <p>Malaysia</p>
+                    </div>
+                    <div class="contact-card">
+                        <span class="contact-label">Response time</span>
+                        <p>Usually within a few hours</p>
                     </div>
                 </div>
                 <form class="contact-form" id="contact-form">
-                    <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    <!-- FormSubmit.co: free form-to-email relay, no API key needed. -->
+                    <input type="hidden" name="_subject" value="New enquiry from STAMPS Bulk Generator website">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+                    <!-- Honeypot spam trap: must stay empty -->
+                    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="you@firm.com.my">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Company Name</label>
-                        <input type="text" id="company" name="company" placeholder="Your company">
+                        <label for="company">Firm / company <span class="optional">optional</span></label>
+                        <input type="text" id="company" name="company" placeholder="Your firm">
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="4" required
-                            placeholder="Tell us about your needs..."></textarea>
+                        <textarea id="message" name="message" rows="5" required
+                            placeholder="Roughly how many instruments do you stamp a month?"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                    <button type="submit" class="btn btn-primary btn-block">Send message</button>
                 </form>
             </div>
         </div>
@@ -563,25 +455,32 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                        </svg>
-                    </div>
-                    <span>STAMPS Bulk Generator</span>
-                </div>
-                <p class="footer-copyright">© 2024 Ameer Shafiq. All rights reserved.</p>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <span class="brand-text"><strong>STAMPS</strong> Bulk Generator</span>
+                <p>Excel to LHDN e-Duti Setem bulk stamping XML.<br>Built and supported in Malaysia.</p>
             </div>
+            <div class="footer-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="footer-copyright">© 2026 Ameer Shafiq. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Sticky mobile action bar (phones only) -->
+    <div class="mobile-cta">
+        <div class="mobile-cta-price">
+            <span class="mobile-cta-amount">RM 490<span>/yr</span></span>
+            <span class="mobile-cta-sub">Free 2-week trial</span>
+        </div>
+        <a href="https://wa.me/601123240319?text=Hi%20Ameer%2C%20I%27m%20interested%20in%20STAMPS%20Bulk%20Generator."
+            target="_blank" class="btn btn-primary">Order via WhatsApp</a>
+    </div>
+
+    <script src="script.js?v=2"></script>
 </body>
 
 </html>
