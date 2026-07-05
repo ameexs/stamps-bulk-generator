@@ -606,7 +606,7 @@ async function runValidation() {
         const FIXABLE = new Set(['MISSING_FIELD', 'INVALID_DATE', 'INVALID_NUMBER']);
         const allIssues = [...results.errors, ...results.warnings];
         elements.errorsList.innerHTML = allIssues.slice(0, 50).map(issue => {
-            const isError = issue.errorType === 'MISSING_FIELD' || issue.errorType === 'INVALID_DATE' || issue.errorType === 'MISSING_FILE';
+            const isError = issue.errorType === 'MISSING_FIELD' || issue.errorType === 'INVALID_DATE' || issue.errorType === 'MISSING_FILE' || issue.errorType === 'INVALID_FILE_TYPE';
             const fixable = FIXABLE.has(issue.errorType) && issue.fieldName && issue.fieldName !== 'attachment';
             let currentVal = '';
             if (fixable) {

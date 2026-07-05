@@ -15,6 +15,55 @@ const APPLICATION_TYPE = { sekuriti: '43', am: '44' };
 const XML_FOOTER = '\n</bulkstamping>';
 
 /**
+ * Attachment filename rules (LHDN spec 2.3.5 + observed portal behaviour).
+ *
+ * The spec allows .pdf/.jpeg/.png/.gif only, and the portal's validator parses
+ * the file type from the FILENAME — names with extra dots (e.g. dates like
+ * "signed 10.6.2026.pdf"), spaces or parentheses get rejected as
+ * "file type not compliant" even when the embedded content is a valid PDF.
+ * Note: the spec lists .jpeg, not .jpg — we map jpg -> jpeg.
+ */
+const ALLOWED_ATTACHMENT_EXTENSIONS = ['pdf', 'jpeg', 'png', 'gif'];
+const EXTENSION_ALIASES = { jpg: 'jpeg' };
+
+/**
+ * Split a filename into base + normalised extension (after alias mapping).
+ * @returns {{base: string, ext: string|null}} ext is lowercase or null if none
+ */
+function splitAttachmentName(filename) {
+    const trimmed = String(filename || '').trim();
+    const dot = trimmed.lastIndexOf('.');
+    if (dot <= 0 || dot === trimmed.length - 1) return { base: trimmed, ext: null };
+    const rawExt = trimmed.slice(dot + 1).toLowerCase();
+    return { base: trimmed.slice(0, dot), ext: EXTENSION_ALIASES[rawExt] || rawExt };
+}
+
+/**
+ * Whether the filename's extension is one LHDN accepts (jpg counts, mapped to jpeg).
+ */
+export function isAllowedAttachmentExtension(filename) {
+    const { ext } = splitAttachmentName(filename);
+    return ext !== null && ALLOWED_ATTACHMENT_EXTENSIONS.includes(ext);
+}
+
+/**
+ * Produce an LHDN-safe attachment name: single dot, lowercase allowed
+ * extension, and only [A-Za-z0-9_-] in the base (spaces/dots/parentheses
+ * become underscores). The original file on disk is untouched — this only
+ * affects the name="" attribute written into the XML, which is safe because
+ * the file content itself is embedded as base64.
+ */
+export function sanitizeAttachmentName(filename) {
+    const { base, ext } = splitAttachmentName(filename);
+    let cleanBase = base
+        .replace(/[^A-Za-z0-9_-]+/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '');
+    if (!cleanBase) cleanBase = 'attachment';
+    return ext ? `${cleanBase}.${ext}` : cleanBase;
+}
+
+/**
  * Build the XML header for a given mode.
  * @param {string} mode - 'sekuriti' | 'am'
  * @returns {string}
@@ -115,20 +164,25 @@ function finalizeBatch(batch, batchNumber, header) {
  */
 function generateInstrumentXml(record, getAttachmentBase64, mode) {
     let attachmentBase64 = '';
-    let attachmentName = record.attachment || '';
+    const attachmentName = record.attachment || '';
 
     if (attachmentName) {
         try {
+            // Lookup uses the ORIGINAL name (that's the key in the uploads map)
             attachmentBase64 = getAttachmentBase64(attachmentName.trim()) || '';
         } catch (e) {
             console.error(`Failed to get attachment: ${attachmentName}`, e);
         }
     }
 
+    // The XML gets the sanitized name — LHDN's validator rejects names with
+    // extra dots/spaces as "file type not compliant".
+    const safeName = attachmentName ? sanitizeAttachmentName(attachmentName) : '';
+
     if (mode === 'am') {
-        return amInstrumentXml(record, attachmentName, attachmentBase64);
+        return amInstrumentXml(record, safeName, attachmentBase64);
     }
-    return sekuritiInstrumentXml(record, attachmentName, attachmentBase64);
+    return sekuritiInstrumentXml(record, safeName, attachmentBase64);
 }
 
 /**

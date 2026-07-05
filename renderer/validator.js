@@ -3,6 +3,8 @@
  * Validates parsed data before XML generation
  */
 
+import { sanitizeAttachmentName, isAllowedAttachmentExtension } from './generator.js';
+
 // Party fields mandatory in both modes (identical transferor/transferee rules)
 const PARTY_MANDATORY = (who) => [
     `${who}.type`,
@@ -114,6 +116,28 @@ export async function validateAll(mappedData, attachmentFiles, mode = 'sekuriti'
                     errorType: 'MISSING_FILE',
                     message: `Attachment file not uploaded: ${filename}`
                 });
+            }
+
+            // LHDN filename rules (spec 2.3.5): .pdf/.jpeg/.png/.gif only, and
+            // the portal parses the type from the NAME — extra dots/spaces get
+            // rejected as "file type not compliant".
+            if (!isAllowedAttachmentExtension(filename)) {
+                rowErrors.push({
+                    rowNumber,
+                    fieldName: 'attachment',
+                    errorType: 'INVALID_FILE_TYPE',
+                    message: `File type not accepted by LHDN (allowed: .pdf, .jpeg, .png, .gif): ${filename}`
+                });
+            } else {
+                const safeName = sanitizeAttachmentName(filename);
+                if (safeName !== filename) {
+                    rowWarnings.push({
+                        rowNumber,
+                        fieldName: 'attachment',
+                        errorType: 'UNSAFE_FILENAME',
+                        message: `Filename has spaces/extra dots/special characters — LHDN rejects these, so it will be submitted as: ${safeName}`
+                    });
+                }
             }
         } else {
             rowWarnings.push({
